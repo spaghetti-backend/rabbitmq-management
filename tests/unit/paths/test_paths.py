@@ -2,7 +2,7 @@ from typing import Optional
 
 import pytest
 
-from rabbitmq_management._paths import Paths, BasePath
+from rabbitmq_management.paths import Paths, BasePath
 
 
 def test_aliveness():
@@ -14,48 +14,6 @@ def test_aliveness():
 def test_aliveness_should_raise_error_when_vhost_is_empty():
     with pytest.raises(ValueError, match="not be empty"):
         Paths.aliveness_test(vhost="")
-
-
-@pytest.mark.parametrize(
-    "vhost, expected",
-    [
-        (None, BasePath.FEDERATION_LINKS),
-        ("test\\vhost", f"{BasePath.FEDERATION_LINKS}/test%5Cvhost"),
-    ],
-)
-def test_federation_links_endpoints(vhost: Optional[str], expected: str):
-    assert Paths.federation_links(vhost=vhost) == expected
-
-
-def test_federation_links_should_raise_error_when_vhost_is_empty():
-    with pytest.raises(ValueError, match="not be empty"):
-        Paths.federation_links(vhost="")
-
-
-@pytest.mark.parametrize(
-    "node, memory, binary, expected",
-    [
-        (None, True, True, BasePath.NODES),
-        ("test@testmq", False, False, f"{BasePath.NODES}/test%40testmq"),
-        ("test@testmq", True, False, f"{BasePath.NODES}/test%40testmq?memory=true"),
-        ("test@testmq", False, True, f"{BasePath.NODES}/test%40testmq?binary=true"),
-        (
-            "test@testmq",
-            True,
-            True,
-            f"{BasePath.NODES}/test%40testmq?memory=true&binary=true",
-        ),
-    ],
-)
-def test_nodes_endpoints(
-    node: Optional[str], memory: bool, binary: bool, expected: str
-):
-    assert Paths.nodes(node=node, memory=memory, binary=binary) == expected
-
-
-def test_nodes_should_raise_error_when_node_is_empty():
-    with pytest.raises(ValueError, match="not be empty"):
-        Paths.nodes(node="")
 
 
 @pytest.mark.parametrize(
@@ -104,6 +62,48 @@ def test_definitions_endpoints(vhost: Optional[str], expected: str):
 def test_definitions_should_raise_error_when_vhost_is_empty():
     with pytest.raises(ValueError, match="not be empty"):
         Paths.definitions(vhost="")
+
+
+@pytest.mark.parametrize(
+    "vhost, expected",
+    [
+        (None, BasePath.FEDERATION_LINKS),
+        ("test\\vhost", f"{BasePath.FEDERATION_LINKS}/test%5Cvhost"),
+    ],
+)
+def test_federation_links_endpoints(vhost: Optional[str], expected: str):
+    assert Paths.federation_links(vhost=vhost) == expected
+
+
+def test_federation_links_should_raise_error_when_vhost_is_empty():
+    with pytest.raises(ValueError, match="not be empty"):
+        Paths.federation_links(vhost="")
+
+
+@pytest.mark.parametrize(
+    "node, memory, binary, expected",
+    [
+        (None, True, True, BasePath.NODES),
+        ("test@testmq", False, False, f"{BasePath.NODES}/test%40testmq"),
+        ("test@testmq", True, False, f"{BasePath.NODES}/test%40testmq?memory=true"),
+        ("test@testmq", False, True, f"{BasePath.NODES}/test%40testmq?binary=true"),
+        (
+            "test@testmq",
+            True,
+            True,
+            f"{BasePath.NODES}/test%40testmq?memory=true&binary=true",
+        ),
+    ],
+)
+def test_nodes_endpoints(
+    node: Optional[str], memory: bool, binary: bool, expected: str
+):
+    assert Paths.nodes(node=node, memory=memory, binary=binary) == expected
+
+
+def test_nodes_should_raise_error_when_node_is_empty():
+    with pytest.raises(ValueError, match="not be empty"):
+        Paths.nodes(node="")
 
 
 @pytest.mark.parametrize(

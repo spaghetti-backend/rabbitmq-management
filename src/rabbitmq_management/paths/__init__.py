@@ -16,18 +16,18 @@ from .vhosts import VHosts
 
 
 class Paths:
-    auth = Auth()
-    bindings = Bindings()
-    connections = Connections()
-    exchanges = Exchanges()
-    health = Health()
-    parameters = Parameters()
-    policies = Policies()
-    operator_policies = OperatorPolicies()
-    queues = Queues()
-    stream = Stream()
-    users = Users()
-    vhosts = VHosts()
+    auth = Auth
+    bindings = Bindings
+    connections = Connections
+    exchanges = Exchanges
+    health = Health
+    parameters = Parameters
+    policies = Policies
+    operator_policies = OperatorPolicies
+    queues = Queues
+    stream = Stream
+    users = Users
+    vhosts = VHosts
 
     @staticmethod
     def aliveness_test(vhost: str) -> str:
@@ -35,12 +35,33 @@ class Paths:
         return f"{BasePath.ALIVENESS_TEST}/{vhost}"
 
     @staticmethod
-    def overview() -> str:
-        return BasePath.OVERVIEW
+    def channels(*, channel: Optional[str] = None) -> str:
+        if channel is None:
+            return BasePath.CHANNELS
+
+        channel = utils.prepare_channel(channel)
+        return f"{BasePath.CHANNELS}/{channel}"
 
     @staticmethod
     def cluster_name() -> str:
         return BasePath.CLUSTER_NAME
+
+    @staticmethod
+    def consumers(*, consumer: Optional[str] = None) -> str:
+        if consumer is None:
+            return BasePath.CONSUMERS
+
+        consumer = utils.prepare_consumer(consumer)
+        return f"{BasePath.CONSUMERS}/{consumer}"
+
+    @staticmethod
+    def definitions(*, vhost: Optional[str] = None) -> str:
+        if vhost is None:
+            return BasePath.DEFINITIONS
+
+        vhost = utils.prepare_vhost(vhost)
+
+        return f"{BasePath.DEFINITIONS}/{vhost}"
 
     @staticmethod
     def extensions() -> str:
@@ -75,29 +96,8 @@ class Paths:
         return path
 
     @staticmethod
-    def channels(*, channel: Optional[str] = None) -> str:
-        if channel is None:
-            return BasePath.CHANNELS
-
-        channel = utils.prepare_channel(channel)
-        return f"{BasePath.CHANNELS}/{channel}"
-
-    @staticmethod
-    def consumers(*, consumer: Optional[str] = None) -> str:
-        if consumer is None:
-            return BasePath.CONSUMERS
-
-        consumer = utils.prepare_consumer(consumer)
-        return f"{BasePath.CONSUMERS}/{consumer}"
-
-    @staticmethod
-    def definitions(*, vhost: Optional[str] = None) -> str:
-        if vhost is None:
-            return BasePath.DEFINITIONS
-
-        vhost = utils.prepare_vhost(vhost)
-
-        return f"{BasePath.DEFINITIONS}/{vhost}"
+    def overview() -> str:
+        return BasePath.OVERVIEW
 
     @staticmethod
     def permissions(

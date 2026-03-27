@@ -2,23 +2,20 @@ from typing import Optional
 
 import pytest
 
-from rabbitmq_management._paths import BasePath, LimitName, Paths
+from rabbitmq_management.paths import BasePath, LimitName, Paths
 
 
-@pytest.mark.parametrize(
-    "vhost, expected",
-    [
-        (None, BasePath.VHOSTS),
-        ("test\\vhost", f"{BasePath.VHOSTS}/test%5Cvhost"),
-    ],
-)
-def test_vhosts_endpoints(vhost: Optional[str], expected: str):
-    assert Paths.vhosts(vhost=vhost) == expected
+def test_all_vhosts_endpoint():
+    assert Paths.vhosts.all() == BasePath.VHOSTS
+
+
+def test_vhost_detail_endpoint():
+    assert Paths.vhosts.detail("test\\vhost") == f"{BasePath.VHOSTS}/test%5Cvhost"
 
 
 def test_vhosts_should_raises_error_when_name_is_empty():
     with pytest.raises(ValueError, match="not be empty"):
-        Paths.vhosts(vhost="")
+        Paths.vhosts.detail(vhost="")
 
 
 def test_vhost_connections_endpoint():

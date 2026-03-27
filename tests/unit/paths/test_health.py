@@ -2,7 +2,7 @@ from typing import Union
 
 import pytest
 
-from rabbitmq_management._paths import BasePath, Paths
+from rabbitmq_management.paths import BasePath, Paths
 
 
 def test_certificate_expiration():

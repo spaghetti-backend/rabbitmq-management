@@ -2,23 +2,20 @@ from typing import Optional
 
 import pytest
 
-from rabbitmq_management._paths import BasePath, Paths
+from rabbitmq_management.paths import BasePath, Paths
 
 
-@pytest.mark.parametrize(
-    "vhost, expected",
-    [
-        (None, BasePath.BINDINGS),
-        ("test@vhost", f"{BasePath.BINDINGS}/test%40vhost"),
-    ],
-)
-def test_bindings_endpoints(vhost: Optional[str], expected: str):
-    assert Paths.bindings(vhost=vhost) == expected
+def test_all_bindings_endpoint():
+    assert Paths.bindings.all() == BasePath.BINDINGS
 
 
-def test_bindings_should_raise_error_when_vhost_is_empty():
+def test_vhost_bindings_endpoint():
+    assert Paths.bindings.by_vhost("test\\vhost") == f"{BasePath.BINDINGS}/test%5Cvhost"
+
+
+def test_vhost_bindings_should_raise_error_when_vhost_is_empty():
     with pytest.raises(ValueError, match="not be empty"):
-        Paths.bindings(vhost="")
+        Paths.bindings.by_vhost(vhost="")
 
 
 @pytest.mark.parametrize(

@@ -2,23 +2,22 @@ from typing import Optional
 
 import pytest
 
-from rabbitmq_management._paths import BasePath, Paths
+from rabbitmq_management.paths import BasePath, Paths
 
 
-@pytest.mark.parametrize(
-    "vhost, expected",
-    [
-        (None, BasePath.EXCHANGES),
-        ("test\\vhost", f"{BasePath.EXCHANGES}/test%5Cvhost"),
-    ],
-)
-def test_exchanges_endpoints(vhost: Optional[str], expected: str):
-    assert Paths.exchanges(vhost=vhost) == expected
+def test_all_exchanges_endpoint():
+    assert Paths.exchanges.all() == BasePath.EXCHANGES
+
+
+def test_exchanges_by_vhost_endpoint():
+    assert (
+        Paths.exchanges.by_vhost("test\\vhost") == f"{BasePath.EXCHANGES}/test%5Cvhost"
+    )
 
 
 def test_exchanges_should_raise_error_when_vhost_is_empty():
     with pytest.raises(ValueError, match="not be empty"):
-        Paths.exchanges(vhost="")
+        Paths.exchanges.by_vhost(vhost="")
 
 
 @pytest.mark.parametrize(

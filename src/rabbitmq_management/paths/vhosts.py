@@ -5,25 +5,9 @@ from .const import BasePath, LimitName
 
 
 class VHosts:
-    def __call__(self, *, vhost: Optional[str] = None) -> str:
-        if vhost is None:
-            return self.list()
-        else:
-            return self.detail(vhost)
-
     @staticmethod
-    def list() -> str:
+    def all() -> str:
         return BasePath.VHOSTS
-
-    @staticmethod
-    def detail(vhost: str) -> str:
-        vhost = utils.prepare_vhost(vhost)
-        return f"{BasePath.VHOSTS}/{vhost}"
-
-    @staticmethod
-    def connections(vhost: str) -> str:
-        vhost = utils.prepare_vhost(vhost)
-        return f"{BasePath.VHOSTS}/{vhost}/connections"
 
     @staticmethod
     def channels(vhost: str) -> str:
@@ -31,14 +15,14 @@ class VHosts:
         return f"{BasePath.VHOSTS}/{vhost}/channels"
 
     @staticmethod
-    def permissions(vhost: str) -> str:
+    def connections(vhost: str) -> str:
         vhost = utils.prepare_vhost(vhost)
-        return f"{BasePath.VHOSTS}/{vhost}/permissions"
+        return f"{BasePath.VHOSTS}/{vhost}/connections"
 
     @staticmethod
-    def topic_permissions(vhost: str) -> str:
+    def detail(vhost: str) -> str:
         vhost = utils.prepare_vhost(vhost)
-        return f"{BasePath.VHOSTS}/{vhost}/topic-permissions"
+        return f"{BasePath.VHOSTS}/{vhost}"
 
     @staticmethod
     def limits(*, vhost: Optional[str] = None) -> str:
@@ -47,6 +31,11 @@ class VHosts:
 
         vhost = utils.prepare_vhost(vhost)
         return f"{BasePath.VHOST_LIMITS}/{vhost}"
+
+    @staticmethod
+    def permissions(vhost: str) -> str:
+        vhost = utils.prepare_vhost(vhost)
+        return f"{BasePath.VHOSTS}/{vhost}/permissions"
 
     @staticmethod
     def set_limits(vhost: str, limit: LimitName) -> str:
@@ -63,3 +52,8 @@ class VHosts:
         node = utils.prepare_node(node)
 
         return f"{BasePath.VHOSTS}/{vhost}/start/{node}"
+
+    @staticmethod
+    def topic_permissions(vhost: str) -> str:
+        vhost = utils.prepare_vhost(vhost)
+        return f"{BasePath.VHOSTS}/{vhost}/topic-permissions"

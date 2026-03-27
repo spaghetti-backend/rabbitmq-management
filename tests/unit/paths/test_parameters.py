@@ -2,23 +2,23 @@ from typing import Optional
 
 import pytest
 
-from rabbitmq_management._paths import BasePath, Paths
+from rabbitmq_management.paths import BasePath, Paths
 
 
-@pytest.mark.parametrize(
-    "component, expected",
-    [
-        (None, BasePath.PARAMETERS),
-        ("test\\component", f"{BasePath.PARAMETERS}/test%5Ccomponent"),
-    ],
-)
-def test_parameters_endpoints(component: Optional[str], expected: str):
-    assert Paths.parameters(component=component) == expected
+def test_all_parameters_endpoints():
+    assert Paths.parameters.all() == BasePath.PARAMETERS
+
+
+def test_component_parameters_endpoint():
+    assert (
+        Paths.parameters.by_component("test\\component")
+        == f"{BasePath.PARAMETERS}/test%5Ccomponent"
+    )
 
 
 def test_parameters_should_raise_error_when_component_is_empty():
     with pytest.raises(ValueError, match="not be empty"):
-        Paths.parameters(component="")
+        Paths.parameters.by_component(component="")
 
 
 def test_parameters_by_vhost_endpoint():

@@ -1,31 +1,22 @@
-from typing import Optional
-
 import pytest
 
-from rabbitmq_management._paths import BasePath, Paths
+from rabbitmq_management.paths import BasePath, Paths
 
 
 @pytest.mark.parametrize(
-    "vhost, enable_queue_totals, disable_stats, expected",
+    "enable_queue_totals, disable_stats, expected",
     [
-        (None, False, False, BasePath.QUEUES),
-        (None, True, False, f"{BasePath.QUEUES}?enable_queue_totals=true"),
-        (None, False, True, f"{BasePath.QUEUES}?disable_stats=true"),
-        (
-            None,
-            True,
-            True,
-            f"{BasePath.QUEUES}?enable_queue_totals=true&disable_stats=true",
-        ),
-        ("test\\vhost", True, True, f"{BasePath.QUEUES}/test%5Cvhost"),
+        (False, False, BasePath.QUEUES),
+        (True, False, f"{BasePath.QUEUES}?enable_queue_totals=true"),
+        (False, True, f"{BasePath.QUEUES}?disable_stats=true"),
+        (True, True, f"{BasePath.QUEUES}?enable_queue_totals=true&disable_stats=true"),
     ],
 )
-def test_queues_endpoints(
-    vhost: Optional[str], enable_queue_totals: bool, disable_stats: bool, expected: str
+def test_all_queues_endpoints(
+    enable_queue_totals: bool, disable_stats: bool, expected: str
 ):
     assert (
-        Paths.queues(
-            vhost=vhost,
+        Paths.queues.all(
             enable_queue_totals=enable_queue_totals,
             disable_stats=disable_stats,
         )
@@ -33,9 +24,13 @@ def test_queues_endpoints(
     )
 
 
+def test_queues_by_vhost_endpoints():
+    assert Paths.queues.by_vhost("test\\vhost") == f"{BasePath.QUEUES}/test%5Cvhost"
+
+
 def test_queues_should_raises_error_when_vhost_is_empty():
     with pytest.raises(ValueError, match="not be empty"):
-        Paths.queues(vhost="")
+        Paths.queues.by_vhost(vhost="")
 
 
 @pytest.mark.parametrize(

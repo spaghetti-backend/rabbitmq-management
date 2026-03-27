@@ -3,13 +3,6 @@ from .const import BasePath
 
 
 class Auth:
-    def __call__(self) -> str:
-        return self.detail()
-
-    @staticmethod
-    def detail() -> str:
-        return BasePath.AUTH
-
     @staticmethod
     def attempts(node: str) -> str:
         node = utils.prepare_node(node)
@@ -21,6 +14,10 @@ class Auth:
         source = utils.prepare_name(source, "Source")
 
         return f"{BasePath.AUTH_ATTEMPTS}/{node}/{source}"
+
+    @staticmethod
+    def detail() -> str:
+        return BasePath.AUTH
 
     @staticmethod
     def hash_password(password: str) -> str:

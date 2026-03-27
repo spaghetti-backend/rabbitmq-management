@@ -5,14 +5,8 @@ from .const import BasePath
 
 
 class Parameters:
-    def __call__(self, *, component: Optional[str] = None) -> str:
-        if component is None:
-            return self.list()
-        else:
-            return self.by_component(component)
-
     @staticmethod
-    def list() -> str:
+    def all() -> str:
         return BasePath.PARAMETERS
 
     @staticmethod

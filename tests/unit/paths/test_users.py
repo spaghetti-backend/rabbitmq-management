@@ -2,23 +2,20 @@ from typing import Optional
 
 import pytest
 
-from rabbitmq_management._paths import BasePath, LimitName, Paths
+from rabbitmq_management.paths import BasePath, LimitName, Paths
 
 
-@pytest.mark.parametrize(
-    "username, expected",
-    [
-        (None, BasePath.USERS),
-        ("test\\user", f"{BasePath.USERS}/test%5Cuser"),
-    ],
-)
-def test_users_endpoints(username: Optional[str], expected: str):
-    assert Paths.users(username=username) == expected
+def test_all_users_endpoint():
+    assert Paths.users.all() == BasePath.USERS
+
+
+def test_user_detail_endpoint():
+    assert Paths.users.detail("test\\user") == f"{BasePath.USERS}/test%5Cuser"
 
 
 def test_users_endoint_raises_error_when_name_is_empty():
     with pytest.raises(ValueError, match="not be empty"):
-        Paths.users(username="")
+        Paths.users.detail(username="")
 
 
 def test_users_without_permissions_endpoint():

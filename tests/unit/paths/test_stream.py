@@ -2,7 +2,7 @@ from typing import Optional
 
 import pytest
 
-from rabbitmq_management._paths import BasePath, Paths
+from rabbitmq_management.paths import BasePath, Paths
 
 
 @pytest.mark.parametrize(

@@ -1,27 +1,14 @@
-from typing import Optional
-
 from . import utils
 from .const import BasePath
 
 
 class Queues:
-    def __call__(
-        self,
-        *,
-        vhost: Optional[str] = None,
-        enable_queue_totals: bool = False,
-        disable_stats: bool = False,
-    ) -> str:
-        if vhost is None:
-            return self.list(
-                enable_queue_totals=enable_queue_totals,
-                disable_stats=disable_stats,
-            )
-        else:
-            return self.by_vhost(vhost)
+    @classmethod
+    def actions(cls, vhost: str, queue: str) -> str:
+        return cls._build_queue_path(vhost, queue, "actions")
 
     @staticmethod
-    def list(*, enable_queue_totals: bool = False, disable_stats: bool = False) -> str:
+    def all(*, enable_queue_totals: bool = False, disable_stats: bool = False) -> str:
         params = []
         if enable_queue_totals:
             params.append("enable_queue_totals=true")
@@ -33,10 +20,18 @@ class Queues:
         else:
             return BasePath.QUEUES
 
+    @classmethod
+    def bindings(cls, vhost: str, queue: str) -> str:
+        return cls._build_queue_path(vhost, queue, "bindings")
+
     @staticmethod
     def by_vhost(vhost: str) -> str:
         vhost = utils.prepare_vhost(vhost)
         return f"{BasePath.QUEUES}/{vhost}"
+
+    @classmethod
+    def contents(cls, vhost: str, queue: str) -> str:
+        return cls._build_queue_path(vhost, queue, "contents")
 
     @classmethod
     def detail(
@@ -54,18 +49,6 @@ class Queues:
             return f"{path}?{'&'.join(params)}"
         else:
             return path
-
-    @classmethod
-    def bindings(cls, vhost: str, queue: str) -> str:
-        return cls._build_queue_path(vhost, queue, "bindings")
-
-    @classmethod
-    def contents(cls, vhost: str, queue: str) -> str:
-        return cls._build_queue_path(vhost, queue, "contents")
-
-    @classmethod
-    def actions(cls, vhost: str, queue: str) -> str:
-        return cls._build_queue_path(vhost, queue, "actions")
 
     @classmethod
     def messages(cls, vhost: str, queue: str) -> str:

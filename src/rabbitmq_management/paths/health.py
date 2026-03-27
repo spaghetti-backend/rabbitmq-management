@@ -9,22 +9,6 @@ class Health:
         return BasePath.HEALTH_ALARMS
 
     @staticmethod
-    def local_alarms() -> str:
-        return BasePath.HEALTH_LOCAL_ALARMS
-
-    @staticmethod
-    def vhosts() -> str:
-        return BasePath.HEALTH_VHOSTS
-
-    @staticmethod
-    def mirror_critical() -> str:
-        return BasePath.HEALTH_MIRROR_CRITICAL
-
-    @staticmethod
-    def quorum_critical() -> str:
-        return BasePath.HEALTH_QUORUM_CRITICAL
-
-    @staticmethod
     def certificate_expiration(*, within: int, unit: TimeUnit) -> str:
         if not isinstance(within, int) or within <= 0:
             raise ValueError("The 'within' argument must be a positive integer")
@@ -34,6 +18,14 @@ class Health:
             raise ValueError(f"Invalid unit. Choose from: {', '.join(valid_units)}")
 
         return f"{BasePath.HEALTH_CERT}/{within}/{unit}"
+
+    @staticmethod
+    def local_alarms() -> str:
+        return BasePath.HEALTH_LOCAL_ALARMS
+
+    @staticmethod
+    def mirror_critical() -> str:
+        return BasePath.HEALTH_MIRROR_CRITICAL
 
     @staticmethod
     def port_listener(port: Union[int, str], /) -> str:
@@ -56,3 +48,11 @@ class Health:
             )
 
         return f"{BasePath.HEALTH_PROTOCOL}/{protocol}"
+
+    @staticmethod
+    def quorum_critical() -> str:
+        return BasePath.HEALTH_QUORUM_CRITICAL
+
+    @staticmethod
+    def vhosts() -> str:
+        return BasePath.HEALTH_VHOSTS

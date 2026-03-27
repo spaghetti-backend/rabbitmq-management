@@ -5,14 +5,8 @@ from .const import BasePath
 
 
 class Policies:
-    def __call__(self, *, vhost: Optional[str] = None) -> str:
-        if vhost is None:
-            return self.list()
-        else:
-            return self.by_vhost(vhost)
-
     @staticmethod
-    def list() -> str:
+    def all() -> str:
         return BasePath.POLICIES
 
     @staticmethod
@@ -29,14 +23,8 @@ class Policies:
 
 
 class OperatorPolicies:
-    def __call__(self, *, vhost: Optional[str] = None) -> str:
-        if vhost is None:
-            return self.list()
-        else:
-            return self.by_vhost(vhost)
-
     @staticmethod
-    def list() -> str:
+    def all() -> str:
         return BasePath.OPERATOR_POLICIES
 
     @staticmethod
