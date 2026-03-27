@@ -1,0 +1,48 @@
+from typing import Literal
+
+LimitName = Literal["max-connections", "max-queues"]
+TimeUnit = Literal["days", "weeks", "months", "years"]
+ProtocolUnit = Literal["amqp091", "amqp10", "mqtt", "stomp", "web-mqtt", "web-stomp"]
+
+
+class BasePath:
+    ALIVENESS_TEST = "aliveness-test"
+    AUTH = "auth"
+    AUTH_ATTEMPTS = "auth/attempts"
+    AUTH_HASH_PASSWORD = "auth/hash_password"
+    BINDINGS = "bindings"
+    CLUSTER_NAME = "cluster-name"
+    CHANNELS = "channels"
+    CONSUMERS = "consumers"
+    CONNECTIONS = "connections"
+    DEFINITIONS = "definitions"
+    EXTENSIONS = "extensions"
+    EXCHANGES = "exchanges"
+    FEDERATION_LINKS = "federation-links"
+    HEALTH = "health/checks"
+    HEALTH_ALARMS = "health/checks/alarms"
+    HEALTH_LOCAL_ALARMS = "health/checks/local-alarms"
+    HEALTH_CERT = "health/checks/certificate-expiration"
+    HEALTH_QUORUM_CRITICAL = "health/checks/node-is-quorum-critical"
+    HEALTH_MIRROR_CRITICAL = "health/checks/node-is-mirror-sync-critical"
+    HEALTH_PORT = "health/checks/port-listener"
+    HEALTH_PROTOCOL = "health/checks/protocol-listener"
+    HEALTH_VHOSTS = "health/checks/virtual-hosts"
+    OVERVIEW = "overview"
+    QUEUES = "queues"
+    NODES = "nodes"
+    USERS = "users"
+    USER_LIMITS = "user-limits"
+    PERMISSIONS = "permissions"
+    POLICIES = "policies"
+    REBALANCE_QUEUES = "rebalance/queues"
+    OPERATOR_POLICIES = "operator-policies"
+    STREAM_CONNECTIONS = "stream/connections"
+    STREAM_PUBLISHERS = "stream/publishers"
+    STREAM_CONSUMERS = "stream/consumers"
+    TOPIC_PERMISSIONS = "topic-permissions"
+    PARAMETERS = "parameters"
+    GLOBAL_PARAMETERS = "global-parameters"
+    VHOSTS = "vhosts"
+    VHOST_LIMITS = "vhost-limits"
+    WHOAMI = "whoami"
