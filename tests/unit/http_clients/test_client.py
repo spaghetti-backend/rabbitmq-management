@@ -1,8 +1,8 @@
-import pytest
-from rabbitmq_management import _http_clients as client
-import respx
 import httpx
+import pytest
+import respx
 
+from rabbitmq_management import http_clients as client
 from rabbitmq_management._exceptions import (
     RMQApiError,
     RMQNetworkError,

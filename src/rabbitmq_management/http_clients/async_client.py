@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 from types import TracebackType
-from typing import TYPE_CHECKING, Optional, Type, Union
+from typing import TYPE_CHECKING, Optional, Tuple, Type, Union
 
 import httpx
-from httpx._types import CertTypes, TimeoutTypes
 
 from rabbitmq_management._exceptions import (
     RMQApiError,
@@ -16,6 +15,9 @@ if TYPE_CHECKING:
     import ssl
 
 
+CertTypes = Union[str, Tuple[str, str], Tuple[str, str, str]]
+
+
 class AsyncHTTPClient:
     def __init__(
         self,
@@ -23,7 +25,7 @@ class AsyncHTTPClient:
         username: str,
         password: str,
         *,
-        timeout: TimeoutTypes = 5.0,
+        timeout: float = 5.0,
         verify: Union[ssl.SSLContext, str, bool] = True,
         cert: Optional[CertTypes] = None,
     ):
