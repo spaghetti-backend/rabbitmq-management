@@ -53,11 +53,15 @@ ruff_fix = true
 ruff_format = true
 
 [tool.unasyncd.files]
-"src/rabbitmq_management/_http_clients/aio_client.py" = "src/rabbitmq_management/_http_clients/client.py"
-"tests/unit/http_clients/test_aio_client.py" = "tests/unit/http_clients/test_client.py"
+"src/rabbitmq_management/http_clients/async_client.py" = "src/rabbitmq_management/http_clients/client.py"
+"src/rabbitmq_management/management_api/async_management_api.py" = "src/rabbitmq_management/management_api/management_api.py"
+"tests/unit/http_clients/test_async_client.py" = "tests/unit/http_clients/test_client.py"
+"tests/unit/management_api/test_async_management_api.py" = "tests/unit/management_api/test_management_api.py"
 
 [tool.unasyncd.add_replacements]
 "AsyncClient" = "Client"
 "AsyncHTTPClient" = "HTTPClient"
+"AsyncRMQManagementAPI" = "RMQManagementAPI"
 "aclose" = "close"
 "async_http_client" = "http_client"
+"async_management_api" = "management_api"
