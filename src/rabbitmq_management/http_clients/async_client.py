@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from types import TracebackType
-from typing import TYPE_CHECKING, Optional, Tuple, Type, Union
+from typing import TYPE_CHECKING, Any, Optional, Tuple, Type, Union
 
 import httpx
 
@@ -29,7 +29,7 @@ class AsyncHTTPClient:
         verify: Union[ssl.SSLContext, str, bool] = True,
         cert: Optional[CertTypes] = None,
     ):
-        base_url = f"{api_url}/api/"
+        base_url = api_url
         credentials = httpx.BasicAuth(username=username, password=password)
 
         self.client = httpx.AsyncClient(
@@ -56,7 +56,7 @@ class AsyncHTTPClient:
 
     async def _request(
         self, method: str, path: str, *, payload: Optional[dict] = None
-    ) -> dict:
+    ) -> Any:
         try:
             request = self.client.build_request(method=method, url=path, json=payload)
             response = await self.client.send(request)
@@ -85,14 +85,14 @@ class AsyncHTTPClient:
                 status_code=e.response.status_code,
             ) from e
 
-    async def get(self, path: str) -> dict:
+    async def get(self, path: str) -> Any:
         return await self._request("GET", path)
 
     async def post(self, path: str, payload: Optional[dict] = None):
         return await self._request("POST", path, payload=payload)
 
-    async def put(self, path: str, payload: Optional[dict] = None):
+    async def put(self, path: str, payload: Optional[dict] = None) -> dict[str, str]:
         return await self._request("PUT", path, payload=payload)
 
-    async def delete(self, path: str):
+    async def delete(self, path: str) -> dict[str, str]:
         return await self._request("DELETE", path)

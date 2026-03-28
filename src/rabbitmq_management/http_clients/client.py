@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from types import TracebackType
-from typing import TYPE_CHECKING, Optional, Tuple, Type, Union
+from typing import TYPE_CHECKING, Any, Optional, Tuple, Type, Union
 
 import httpx
 
@@ -29,7 +29,7 @@ class HTTPClient:
         verify: Union[ssl.SSLContext, str, bool] = True,
         cert: Optional[CertTypes] = None,
     ):
-        base_url = f"{api_url}/api/"
+        base_url = api_url
         credentials = httpx.BasicAuth(username=username, password=password)
 
         self.client = httpx.Client(
@@ -56,7 +56,7 @@ class HTTPClient:
 
     def _request(
         self, method: str, path: str, *, payload: Optional[dict] = None
-    ) -> dict:
+    ) -> Any:
         try:
             request = self.client.build_request(method=method, url=path, json=payload)
             response = self.client.send(request)
@@ -85,14 +85,14 @@ class HTTPClient:
                 status_code=e.response.status_code,
             ) from e
 
-    def get(self, path: str) -> dict:
+    def get(self, path: str) -> Any:
         return self._request("GET", path)
 
     def post(self, path: str, payload: Optional[dict] = None):
         return self._request("POST", path, payload=payload)
 
-    def put(self, path: str, payload: Optional[dict] = None):
+    def put(self, path: str, payload: Optional[dict] = None) -> dict[str, str]:
         return self._request("PUT", path, payload=payload)
 
-    def delete(self, path: str):
+    def delete(self, path: str) -> dict[str, str]:
         return self._request("DELETE", path)
