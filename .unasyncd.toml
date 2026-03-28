@@ -1,0 +1,22 @@
+[tool.unasyncd]
+force_regen = true
+ruff_fix = true
+ruff_format = true
+
+[tool.unasyncd.files]
+"src/rabbitmq_management/http_clients/async_client.py" = "src/rabbitmq_management/http_clients/client.py"
+"src/rabbitmq_management/management_api/_async/" = "src/rabbitmq_management/management_api/_sync/"
+"tests/unit/http_clients/test_async_client.py" = "tests/unit/http_clients/test_client.py"
+"tests/unit/management_api/test_async_management_api.py" = "tests/unit/management_api/test_management_api.py"
+"tests/unit/management_api/test_async_channels_api.py" = "tests/unit/management_api/test_channels_api.py"
+"tests/unit/management_api/test_async_consumers_api.py" = "tests/unit/management_api/test_consumers_api.py"
+
+[tool.unasyncd.add_replacements]
+"AsyncClient" = "Client"
+"AsyncHTTPClient" = "HTTPClient"
+"AsyncRMQManagementAPI" = "RMQManagementAPI"
+"AsyncChannelsAPI" = "ChannelsAPI"
+"AsyncConsumersAPI" = "ConsumersAPI"
+"aclose" = "close"
+"async_http_client" = "http_client"
+"async_management_api" = "management_api"
