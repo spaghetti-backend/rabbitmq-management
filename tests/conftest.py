@@ -14,7 +14,7 @@ def api_url():
     return "http://localhost:1234"
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 def api_mock(api_url: str) -> Iterator[MockRouter]:
     with respx.mock(
         base_url=f"{api_url}/api/",
