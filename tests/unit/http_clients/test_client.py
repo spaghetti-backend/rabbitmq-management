@@ -3,7 +3,7 @@ import pytest
 from respx import MockResponse, MockRouter
 
 from rabbitmq_management import http_clients as client
-from rabbitmq_management._exceptions import (
+from rabbitmq_management.exceptions import (
     RMQApiError,
     RMQNetworkError,
     RMQRequestError,

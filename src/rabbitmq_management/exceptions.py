@@ -1,3 +1,6 @@
+import json
+
+
 class RMQManagementError(Exception):
     """Base exception for the rabbitmq-management library."""
 
@@ -13,6 +16,11 @@ class RMQNetworkError(RMQRequestError):
 class RMQApiError(RMQManagementError):
     """Exception raised when the RabbitMQ API returns an error response (HTTP 4xx or 5xx)."""
 
-    def __init__(self, message: str, status_code: int) -> None:
+    def __init__(self, message: str, status_code: int, text: str) -> None:
         super().__init__(message)
         self.status_code = status_code
+        self.text = text
+        try:
+            self.reason = json.loads(text)
+        except json.JSONDecodeError:
+            self.reason = None

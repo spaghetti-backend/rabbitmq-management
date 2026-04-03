@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Any, Optional, Tuple, Type, Union
 
 import httpx
 
-from rabbitmq_management._exceptions import (
+from rabbitmq_management.exceptions import (
     RMQApiError,
     RMQNetworkError,
     RMQRequestError,
@@ -29,7 +29,6 @@ class AsyncHTTPClient:
         verify: Union[ssl.SSLContext, str, bool] = True,
         cert: Optional[CertTypes] = None,
     ):
-        base_url = api_url
         credentials = httpx.BasicAuth(username=username, password=password)
 
         self.client = httpx.AsyncClient(
@@ -37,7 +36,7 @@ class AsyncHTTPClient:
             verify=verify,
             cert=cert,
             timeout=timeout,
-            base_url=base_url,
+            base_url=api_url,
         )
 
     async def __aenter__(self) -> AsyncHTTPClient:
@@ -55,15 +54,25 @@ class AsyncHTTPClient:
         await self.client.aclose()
 
     async def _request(
-        self, method: str, path: str, *, payload: Optional[dict] = None
+        self,
+        method: str,
+        path: str,
+        *,
+        payload: Optional[dict] = None,
+        headers: Optional[dict] = None,
     ) -> Any:
         try:
-            request = self.client.build_request(method=method, url=path, json=payload)
+            request = self.client.build_request(
+                method=method,
+                url=path,
+                json=payload,
+                headers=headers,
+            )
             response = await self.client.send(request)
             response.raise_for_status()
 
             if not response.content:
-                return {"status": "success"}
+                return {"status": "success", "headers": response.headers}
 
             return response.json()
         except httpx.TimeoutException as e:
@@ -83,16 +92,17 @@ class AsyncHTTPClient:
             raise RMQApiError(
                 message=f"RabbitMQ API returned an error ({e.response.status_code}): {e.response.text}",
                 status_code=e.response.status_code,
+                text=e.response.text,
             ) from e
 
     async def get(self, path: str) -> Any:
-        return await self._request("GET", path)
+        return await self._request("GET", path=path)
 
-    async def post(self, path: str, payload: Optional[dict] = None):
-        return await self._request("POST", path, payload=payload)
+    async def post(self, path: str, payload: Optional[dict] = None) -> Any:
+        return await self._request("POST", path=path, payload=payload)
 
-    async def put(self, path: str, payload: Optional[dict] = None) -> dict[str, str]:
-        return await self._request("PUT", path, payload=payload)
+    async def put(self, path: str, payload: Optional[dict] = None) -> dict:
+        return await self._request("PUT", path=path, payload=payload)
 
-    async def delete(self, path: str) -> dict[str, str]:
-        return await self._request("DELETE", path)
+    async def delete(self, path: str, *, headers: Optional[dict] = None) -> dict:
+        return await self._request("DELETE", path=path, headers=headers)
