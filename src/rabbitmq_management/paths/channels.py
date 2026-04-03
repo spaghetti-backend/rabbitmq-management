@@ -8,6 +8,6 @@ class Channels:
         return BasePath.CHANNELS
 
     @staticmethod
-    def by_vhost(vhost: str) -> str:
-        vhost = utils.prepare_vhost(vhost)
-        return f"{BasePath.CHANNELS}/{vhost}"
+    def detail(channel: str) -> str:
+        channel = utils.prepare_channel(channel)
+        return f"{BasePath.CHANNELS}/{channel}"

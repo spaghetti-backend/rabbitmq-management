@@ -2,7 +2,7 @@ from typing import Optional
 
 import pytest
 
-from rabbitmq_management.paths import BasePath, LimitName, Paths
+from rabbitmq_management.paths import BasePath, VHostLimitName, Paths
 
 
 def test_all_vhosts_endpoint():
@@ -68,7 +68,7 @@ def test_vhost_topic_permissions_should_raises_error_when_name_is_empty():
 
 def test_vhost_start_node_endpoint():
     assert (
-        Paths.vhosts.start_node("test\\vhost", "test\\node")
+        Paths.vhosts.start("test\\vhost", "test\\node")
         == f"{BasePath.VHOSTS}/test%5Cvhost/start/test%5Cnode"
     )
 
@@ -82,7 +82,7 @@ def test_vhost_start_node_endpoint():
 )
 def test_vhost_start_node_should_raises_error_when_name_is_empty(vhost: str, node: str):
     with pytest.raises(ValueError, match="not be empty"):
-        Paths.vhosts.start_node(vhost, node)
+        Paths.vhosts.start(vhost, node)
 
 
 @pytest.mark.parametrize(
@@ -116,7 +116,7 @@ def test_vhost_limits_should_raises_error_when_name_is_empty():
         ),
     ],
 )
-def test_vhost_set_limits_endpoints(vhost: str, limit: LimitName, expected: str):
+def test_vhost_set_limits_endpoints(vhost: str, limit: VHostLimitName, expected: str):
     assert Paths.vhosts.set_limits(vhost, limit) == expected
 
 
@@ -133,7 +133,7 @@ def test_vhost_set_limits_should_raises_error_when_name_is_empty():
     ],
 )
 def test_vhost_set_limits_should_raises_error_when_limit_is_invalid(
-    vhost: str, limit: LimitName
+    vhost: str, limit: VHostLimitName
 ):
     with pytest.raises(ValueError, match="('max-connections', 'max-queues')"):
         Paths.vhosts.set_limits(vhost, limit)

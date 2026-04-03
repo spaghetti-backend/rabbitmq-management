@@ -14,23 +14,14 @@ def test_attempts_should_raise_error_when_invalid_node_provided():
 
 def test_attempts_by_source_endpoint():
     assert (
-        Paths.auth.attempts_by_source("test\\node", "192.168.0.1")
-        == f"{BasePath.AUTH_ATTEMPTS}/test%5Cnode/192.168.0.1"
+        Paths.auth.attempts_by_source("test\\node")
+        == f"{BasePath.AUTH_ATTEMPTS}/test%5Cnode/source"
     )
 
 
-@pytest.mark.parametrize(
-    "node, source",
-    [
-        ("", "test"),
-        ("test", ""),
-    ],
-)
-def test_attempts_by_source_should_raise_error_when_invalid_node_provided(
-    node: str, source: str
-):
+def test_attempts_by_source_should_raise_error_when_invalid_node_provided():
     with pytest.raises(ValueError, match="not be empty"):
-        Paths.auth.attempts_by_source(node, source)
+        Paths.auth.attempts_by_source(node="")
 
 
 def test_hash_password_endpoint():

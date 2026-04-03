@@ -2,7 +2,7 @@ from typing import Optional
 
 import pytest
 
-from rabbitmq_management.paths import BasePath, LimitName, Paths
+from rabbitmq_management.paths import BasePath, UserLimitName, Paths
 
 
 def test_all_users_endpoint():
@@ -30,6 +30,13 @@ def test_user_permissions_endpoint():
     assert (
         Paths.users.permissions("test\\user")
         == f"{BasePath.USERS}/test%5Cuser/permissions"
+    )
+
+
+def test_user_topic_permissions_endpoint():
+    assert (
+        Paths.users.topic_permissions("test\\user")
+        == f"{BasePath.USERS}/test%5Cuser/topic-permissions"
     )
 
 
@@ -64,12 +71,12 @@ def test_user_limits_raises_error_when_name_is_empty():
         ),
         (
             "test\\username",
-            "max-queues",
-            f"{BasePath.USER_LIMITS}/test%5Cusername/max-queues",
+            "max-channels",
+            f"{BasePath.USER_LIMITS}/test%5Cusername/max-channels",
         ),
     ],
 )
-def test_users_set_limits_endpoints(username: str, limit: LimitName, expected: str):
+def test_users_set_limits_endpoints(username: str, limit: UserLimitName, expected: str):
     assert Paths.users.set_limits(username, limit) == expected
 
 
@@ -86,7 +93,7 @@ def test_users_set_limits_should_raises_error_when_name_is_empty():
     ],
 )
 def test_users_set_limits_should_raises_error_when_limit_is_invalid(
-    username: str, limit: LimitName
+    username: str, limit: UserLimitName
 ):
-    with pytest.raises(ValueError, match="('max-connections', 'max-queues')"):
+    with pytest.raises(ValueError, match="('max-connections', 'max-channels')"):
         Paths.users.set_limits(username, limit)

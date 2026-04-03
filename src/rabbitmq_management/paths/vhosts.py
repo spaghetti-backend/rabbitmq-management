@@ -1,7 +1,7 @@
 from typing import Optional, get_args
 
 from . import utils
-from .const import BasePath, LimitName
+from .const import BasePath, VHostLimitName
 
 
 class VHosts:
@@ -38,16 +38,16 @@ class VHosts:
         return f"{BasePath.VHOSTS}/{vhost}/permissions"
 
     @staticmethod
-    def set_limits(vhost: str, limit: LimitName) -> str:
+    def set_limits(vhost: str, limit: VHostLimitName) -> str:
         vhost = utils.prepare_vhost(vhost)
-        valid_limit_names = get_args(LimitName)
+        valid_limit_names = get_args(VHostLimitName)
         if limit not in valid_limit_names:
             raise ValueError(f"Limit should be one of: {valid_limit_names}")
 
         return f"{BasePath.VHOST_LIMITS}/{vhost}/{limit}"
 
     @staticmethod
-    def start_node(vhost: str, node: str) -> str:
+    def start(vhost: str, node: str) -> str:
         vhost = utils.prepare_vhost(vhost)
         node = utils.prepare_node(node)
 

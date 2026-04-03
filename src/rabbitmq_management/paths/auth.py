@@ -9,11 +9,10 @@ class Auth:
         return f"{BasePath.AUTH_ATTEMPTS}/{node}"
 
     @staticmethod
-    def attempts_by_source(node: str, source: str) -> str:
+    def attempts_by_source(node: str) -> str:
         node = utils.prepare_node(node)
-        source = utils.prepare_name(source, "Source")
 
-        return f"{BasePath.AUTH_ATTEMPTS}/{node}/{source}"
+        return f"{BasePath.AUTH_ATTEMPTS}/{node}/source"
 
     @staticmethod
     def detail() -> str:

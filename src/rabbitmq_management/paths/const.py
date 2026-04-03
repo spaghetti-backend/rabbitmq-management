@@ -1,6 +1,7 @@
 from typing import Literal
 
-LimitName = Literal["max-connections", "max-queues"]
+VHostLimitName = Literal["max-connections", "max-queues"]
+UserLimitName = Literal["max-connections", "max-channels"]
 TimeUnit = Literal["days", "weeks", "months", "years"]
 ProtocolUnit = Literal["amqp091", "amqp10", "mqtt", "stomp", "web-mqtt", "web-stomp"]
 

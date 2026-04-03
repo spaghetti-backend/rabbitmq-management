@@ -1,11 +1,9 @@
-from typing import Optional
-
 from . import utils
 from .auth import Auth
 from .bindings import Bindings
 from .channels import Channels
 from .connections import Connections
-from .const import BasePath, LimitName, ProtocolUnit, TimeUnit
+from .const import BasePath, ProtocolUnit, TimeUnit, UserLimitName, VHostLimitName
 from .consumers import Consumers
 from .definitions import Definitions
 from .exchanges import Exchanges

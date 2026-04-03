@@ -1,7 +1,7 @@
 from typing import Optional, get_args
 
 from . import utils
-from .const import BasePath, LimitName
+from .const import BasePath, UserLimitName
 
 
 class Users:
@@ -32,13 +32,18 @@ class Users:
         return f"{BasePath.USERS}/{username}/permissions"
 
     @staticmethod
-    def set_limits(username: str, limit: LimitName) -> str:
+    def set_limits(username: str, limit: UserLimitName) -> str:
         username = utils.prepare_username(username)
-        valid_limit_names = get_args(LimitName)
+        valid_limit_names = get_args(UserLimitName)
         if limit not in valid_limit_names:
             raise ValueError(f"Limit should be one of: {valid_limit_names}")
 
         return f"{BasePath.USER_LIMITS}/{username}/{limit}"
+
+    @staticmethod
+    def topic_permissions(username: str) -> str:
+        username = utils.prepare_username(username)
+        return f"{BasePath.USERS}/{username}/topic-permissions"
 
     @staticmethod
     def without_permissions() -> str:

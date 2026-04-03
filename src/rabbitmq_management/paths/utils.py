@@ -21,7 +21,10 @@ def prepare_connection(connection: str, /) -> str:
 
 
 def prepare_exchange(exchange: str, /) -> str:
-    return prepare_name(exchange, "Exchange")
+    if not isinstance(exchange, str):
+        raise ValueError("Exchange should be a string")
+
+    return quote(exchange, safe="")
 
 
 def prepare_username(username: str, /) -> str:
@@ -34,10 +37,6 @@ def prepare_queue(queue: str, /) -> str:
 
 def prepare_channel(channel: str, /) -> str:
     return prepare_name(channel, "Channel")
-
-
-def prepare_consumer(consumer: str, /) -> str:
-    return prepare_name(consumer, "Consumer")
 
 
 def prepare_component(component: str, /) -> str:

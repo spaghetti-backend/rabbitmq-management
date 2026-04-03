@@ -50,7 +50,6 @@ def test_binding_exchange_to_queue_endpoints(
     "vhost, exchange, queue, props",
     [
         ("", "exchange", "queue", "props"),
-        ("vhost", "", "queue", "props"),
         ("vhost", "exchange", "", "props"),
         ("vhost", "exchange", "queue", ""),
     ],
@@ -94,8 +93,6 @@ def test_binding_exchange_to_exchange_endpoints(
     "vhost, source, destination, props",
     [
         ("", "source", "destination", "props"),
-        ("vhost", "", "destination", "props"),
-        ("vhost", "source", "", "props"),
         ("vhost", "source", "destination", ""),
     ],
 )
