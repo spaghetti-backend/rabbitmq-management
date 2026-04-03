@@ -21,9 +21,6 @@ def prepare_connection(connection: str, /) -> str:
 
 
 def prepare_exchange(exchange: str, /) -> str:
-    if not isinstance(exchange, str):
-        raise ValueError("Exchange should be a string")
-
     return quote(exchange, safe="")
 
 

@@ -1,4 +1,6 @@
+from typing import Optional
 import httpx
+import pytest
 from respx import MockRouter
 
 from rabbitmq_management import management_api as api
@@ -24,14 +26,22 @@ async def test_get_connection_detail(
     assert response.get("state") == "running"
 
 
+@pytest.mark.parametrize("reason", [None, "test"])
 async def test_close_connection(
-    async_management_api: api.AsyncRMQManagementAPI, api_mock: MockRouter
+    reason: Optional[str],
+    async_management_api: api.AsyncRMQManagementAPI,
+    api_mock: MockRouter,
 ):
-    api_mock.delete("connections/tc", headers={"X-Reason": "test"}).respond(
+    if reason:
+        headers = {"X-Reason": reason}
+    else:
+        headers = {}
+
+    api_mock.delete("connections/tc", headers=headers).respond(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.connections.close(connection="tc", reason="test")
+    await async_management_api.connections.close(connection="tc", reason=reason)
 
 
 async def test_connections_by_user(
@@ -44,15 +54,23 @@ async def test_connections_by_user(
     assert isinstance(response, list)
 
 
+@pytest.mark.parametrize("reason", [None, "test"])
 async def test_close_all_user_connections(
-    async_management_api: api.AsyncRMQManagementAPI, api_mock: MockRouter
+    reason: Optional[str],
+    async_management_api: api.AsyncRMQManagementAPI,
+    api_mock: MockRouter,
 ):
-    api_mock.delete("connections/username/tu", headers={"X-Reason": "test"}).respond(
+    if reason:
+        headers = {"X-Reason": reason}
+    else:
+        headers = {}
+
+    api_mock.delete("connections/username/tu", headers=headers).respond(
         status_code=httpx.codes.NO_CONTENT
     )
 
     await async_management_api.connections.close_user_connections(
-        username="tu", reason="test"
+        username="tu", reason=reason
     )
 
 
