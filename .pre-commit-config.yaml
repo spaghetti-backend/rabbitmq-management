@@ -1,0 +1,37 @@
+repos:
+  - repo: https://github.com/provinzkraut/unasyncd
+    rev: v0.10.0
+    hooks:
+      - id: unasyncd
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.6
+    hooks:
+      - id: ruff
+        args: [ --fix ]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.20.0
+    hooks:
+      - id: mypy
+        exclude: tests
+        additional_dependencies: [
+            "httpx",
+        ]
+        args: [--config-file=pyproject.toml]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-ast
+      - id: check-case-conflict
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: trailing-whitespace
+      - id: check-toml
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=500']
