@@ -35,7 +35,8 @@ class DefinitionsAPI(BaseAPI):
         - Conflicting definitions on mutable objects will cause
         the object in the server to be overwritten with the object from the definitions.
 
-        - In the event of an error you will be left with a part-applied set of definitions.
+        - In the event of an error you will be left with a part-applied
+          set of definitions.
         """
         return self._http_client.post(Paths.definitions.all(), payload=definitions)
 
@@ -54,7 +55,8 @@ class DefinitionsAPI(BaseAPI):
         - Conflicting definitions on mutable objects will cause
         the object in the server to be overwritten with the object from the definitions.
 
-        - In the event of an error you will be left with a part-applied set of definitions.
+        - In the event of an error you will be left with a part-applied
+          set of definitions.
         """
         return self._http_client.post(
             Paths.definitions.by_vhost(vhost=vhost), payload=definitions

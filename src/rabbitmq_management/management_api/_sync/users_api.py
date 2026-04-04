@@ -51,11 +51,15 @@ class UsersAPI(BaseAPI):
         Either 'password' or 'password_hash' can be set.
         If neither are set the user will not be able to log in with a password, but
         other mechanisms like client certificates may be used.
-        Setting 'password_hash' to "" will ensure the user cannot use a password to log in.
+        Setting 'password_hash' to "" will ensure the user cannot use a password
+        to log in.
+
         'tags' is a comma-separated list of tags for the user.
         Currently recognised tags are 'administrator', 'monitoring' and 'management'.
         'password_hash' must be generated using the algorithm described here.
-        You may also specify the hash function being used by adding the 'hashing_algorithm' key to the body.
+        You may also specify the hash function being used by adding
+        the 'hashing_algorithm' key to the body.
+
         Currently recognised algorithms are 'rabbit_password_hashing_sha256',
         'rabbit_password_hashing_sha512', and 'rabbit_password_hashing_md5'.
         """

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from types import TracebackType
-from typing import TYPE_CHECKING, Optional, Type, Union
+from typing import TYPE_CHECKING
 
 from rabbitmq_management import http_clients
 from rabbitmq_management.paths import Paths
@@ -26,6 +25,7 @@ from . import (
 
 if TYPE_CHECKING:
     import ssl
+    from types import TracebackType
 
 
 class AsyncRMQManagementAPI:
@@ -36,8 +36,8 @@ class AsyncRMQManagementAPI:
         password: str,
         *,
         timeout: float = 5.0,
-        verify: Union[ssl.SSLContext, str, bool] = True,
-        cert: Optional[http_clients.CertTypes] = None,
+        verify: ssl.SSLContext | str | bool = True,
+        cert: http_clients.CertTypes | None = None,
     ) -> None:
         self._http_client = http_clients.AsyncHTTPClient(
             api_url=f"{api_url}/api/",
@@ -68,7 +68,7 @@ class AsyncRMQManagementAPI:
 
     async def __aexit__(
         self,
-        exc_type: Optional[Type[BaseException]],
+        exc_type: type[BaseException],
         exc: BaseException,
         tb: TracebackType,
     ) -> None:

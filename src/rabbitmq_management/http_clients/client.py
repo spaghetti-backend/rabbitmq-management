@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from types import TracebackType
-from typing import TYPE_CHECKING, Any, Optional, Tuple, Type, Union
+from typing import TYPE_CHECKING, Any, Union
 
 import httpx
 
@@ -13,9 +12,10 @@ from rabbitmq_management.exceptions import (
 
 if TYPE_CHECKING:
     import ssl
+    from types import TracebackType
 
 
-CertTypes = Union[str, Tuple[str, str], Tuple[str, str, str]]
+CertTypes = Union[str, tuple[str, str], tuple[str, str, str]]
 
 
 class HTTPClient:
@@ -26,8 +26,8 @@ class HTTPClient:
         password: str,
         *,
         timeout: float = 5.0,
-        verify: Union[ssl.SSLContext, str, bool] = True,
-        cert: Optional[CertTypes] = None,
+        verify: ssl.SSLContext | str | bool = True,
+        cert: CertTypes | None = None,
     ):
         credentials = httpx.BasicAuth(username=username, password=password)
 
@@ -44,7 +44,7 @@ class HTTPClient:
 
     def __exit__(
         self,
-        exc_type: Optional[Type[BaseException]],
+        exc_type: type[BaseException] | None,
         exc: BaseException,
         tb: TracebackType,
     ) -> None:
@@ -58,8 +58,8 @@ class HTTPClient:
         method: str,
         path: str,
         *,
-        payload: Optional[dict] = None,
-        headers: Optional[dict] = None,
+        payload: dict | None = None,
+        headers: dict | None = None,
     ) -> Any:
         try:
             request = self.client.build_request(
@@ -90,7 +90,8 @@ class HTTPClient:
 
         except httpx.HTTPStatusError as e:
             raise RMQApiError(
-                message=f"RabbitMQ API returned an error ({e.response.status_code}): {e.response.text}",
+                message=f"RabbitMQ API returned an error ({e.response.status_code}): \
+                {e.response.text}",
                 status_code=e.response.status_code,
                 text=e.response.text,
             ) from e
@@ -98,11 +99,11 @@ class HTTPClient:
     def get(self, path: str) -> Any:
         return self._request("GET", path=path)
 
-    def post(self, path: str, payload: Optional[dict] = None) -> Any:
+    def post(self, path: str, payload: dict | None = None) -> Any:
         return self._request("POST", path=path, payload=payload)
 
-    def put(self, path: str, payload: Optional[dict] = None) -> dict:
+    def put(self, path: str, payload: dict | None = None) -> dict:
         return self._request("PUT", path=path, payload=payload)
 
-    def delete(self, path: str, *, headers: Optional[dict] = None) -> dict:
+    def delete(self, path: str, *, headers: dict | None = None) -> dict:
         return self._request("DELETE", path=path, headers=headers)

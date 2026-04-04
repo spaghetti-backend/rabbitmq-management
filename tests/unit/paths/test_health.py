@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional, Union
 
 import pytest
 
@@ -21,9 +21,11 @@ def test_certificate_expiration_should_raise_error_when_incorrect_within_provide
 
 
 @pytest.mark.parametrize("unit", [None, "", "test"])
-def test_certificate_expiration_should_raise_error_when_incorrect_unit_provided(unit):
+def test_certificate_expiration_should_raise_error_when_incorrect_unit_provided(
+    unit: Optional[str],
+):
     with pytest.raises(ValueError, match="Invalid unit"):
-        Paths.health.certificate_expiration(within=1, unit=unit)
+        Paths.health.certificate_expiration(within=1, unit=unit)  # type: ignore[reportArgumentType]
 
 
 @pytest.mark.parametrize(
@@ -38,9 +40,11 @@ def test_port_listener(port: Union[str, int], expected: str):
 
 
 @pytest.mark.parametrize("port", [None, 1023, 65536, "test"])
-def test_port_listener_should_raise_error_when_incorrect_port_provided(port):
+def test_port_listener_should_raise_error_when_incorrect_port_provided(
+    port: Optional[Union[str, int]],
+):
     with pytest.raises(ValueError):
-        Paths.health.port_listener(port)
+        Paths.health.port_listener(port)  # type: ignore[reportArgumentType]
 
 
 def test_protocol_listener():
@@ -52,7 +56,7 @@ def test_protocol_listener():
 
 @pytest.mark.parametrize("protocol", [None, "", "test"])
 def test_protocol_listener_should_raise_error_when_incorrect_protocol_provided(
-    protocol,
+    protocol: Optional[str],
 ):
     with pytest.raises(ValueError):
-        Paths.health.protocol_listener(protocol)
+        Paths.health.protocol_listener(protocol)  # type: ignore[reportArgumentType]

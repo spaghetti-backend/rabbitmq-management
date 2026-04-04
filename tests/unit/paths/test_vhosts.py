@@ -2,7 +2,7 @@ from typing import Optional
 
 import pytest
 
-from rabbitmq_management.paths import BasePath, VHostLimitName, Paths
+from rabbitmq_management.paths import BasePath, Paths, VHostLimitName
 
 
 def test_all_vhosts_endpoint():
@@ -135,5 +135,5 @@ def test_vhost_set_limits_should_raises_error_when_name_is_empty():
 def test_vhost_set_limits_should_raises_error_when_limit_is_invalid(
     vhost: str, limit: VHostLimitName
 ):
-    with pytest.raises(ValueError, match="('max-connections', 'max-queues')"):
+    with pytest.raises(ValueError, match=r"('max-connections', 'max-queues')"):
         Paths.vhosts.set_limits(vhost, limit)

@@ -34,7 +34,8 @@ class Health:
 
         if not isinstance(port, int) or not (1024 <= port <= 65535):
             raise ValueError(
-                "Port must be an integer between 1024 and 65535 (or a valid numeric string)"
+                "Port must be an integer between 1024 and 65535 \
+                (or a valid numeric string)"
             )
 
         return f"{BasePath.HEALTH_PORT}/{port}"

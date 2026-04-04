@@ -40,7 +40,8 @@ class AsyncOperatorPoliciesAPI(BaseAPI):
           "apply-to": "queues"
         }
 
-        'pattern' and 'definition' are mandatory, 'priority' and 'apply-to' are optional.
+        'pattern' and 'definition' are mandatory,
+        'priority' and 'apply-to' are optional.
         """
         return await self._http_client.put(
             Paths.operator_policies.detail(vhost=vhost, policy=policy), payload=value
@@ -93,7 +94,8 @@ class AsyncPoliciesAPI(BaseAPI):
           "apply-to": "all"
         }
 
-        'pattern' and 'definition' are mandatory, 'priority' and 'apply-to' are optional.
+        'pattern' and 'definition' are mandatory,
+        'priority' and 'apply-to' are optional.
         """
         return await self._http_client.put(
             Paths.policies.detail(vhost=vhost, policy=policy), payload=value

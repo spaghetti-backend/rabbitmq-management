@@ -2,7 +2,7 @@ from typing import Optional
 
 import pytest
 
-from rabbitmq_management.paths import BasePath, UserLimitName, Paths
+from rabbitmq_management.paths import BasePath, Paths, UserLimitName
 
 
 def test_all_users_endpoint():
@@ -95,5 +95,5 @@ def test_users_set_limits_should_raises_error_when_name_is_empty():
 def test_users_set_limits_should_raises_error_when_limit_is_invalid(
     username: str, limit: UserLimitName
 ):
-    with pytest.raises(ValueError, match="('max-connections', 'max-channels')"):
+    with pytest.raises(ValueError, match=r"('max-connections', 'max-channels')"):
         Paths.users.set_limits(username, limit)

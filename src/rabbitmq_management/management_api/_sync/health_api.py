@@ -1,6 +1,6 @@
 from rabbitmq_management.exceptions import RMQApiError
-from rabbitmq_management.paths import Paths, TimeUnit
-from rabbitmq_management.paths.const import ProtocolUnit
+from rabbitmq_management.paths import Paths
+from rabbitmq_management.paths.const import ProtocolUnit, TimeUnit
 
 from .base_api import BaseAPI
 
@@ -59,7 +59,8 @@ class AsyncHealthAPI(BaseAPI):
 
     def certificate_expiration(self, within: int, unit: TimeUnit) -> dict:
         """
-        Checks the expiration date on the certificates for every listener configured to use TLS.
+        Checks the expiration date on the certificates for every listener
+        configured to use TLS.
 
         Valid units: days, weeks, months, years.
         The value of the within argument is the number of units.
@@ -104,8 +105,8 @@ class AsyncHealthAPI(BaseAPI):
         """
         Checks if there is an active listener on the give port
 
-        Returns {"status": "ok", "port": 15672} when there are no alarms and 15672 port is given,
-        and dictionary with the following structure if check failed:
+        Returns {"status": "ok", "port": 15672} when there are no alarms and 15672 port
+        is given, and dictionary with the following structure if check failed:
         {
           "status": "failed",
           "reason": "No active listener",
@@ -131,8 +132,8 @@ class AsyncHealthAPI(BaseAPI):
         Checks if there is an active listener for the given protocol.
         Valid protocol names are: amqp091, amqp10, mqtt, stomp, web-mqtt, web-stomp.
 
-        Returns {"status": "ok", "protocol": "mqtt"} when there are no alarms and 'mqtt" protocol is given,
-        and dictionary with the following structure if check failed:
+        Returns {"status": "ok", "protocol": "mqtt"} when there are no alarms and 'mqtt"
+        protocol is given, and dictionary with the following structure if check failed:
         {
           "status": "failed",
           "reason": "No active listener",
@@ -180,8 +181,8 @@ class AsyncHealthAPI(BaseAPI):
 
     def node_quorum_critical(self) -> dict:
         """
-        Checks if there are quorum queues with minimum online quorum
-        (queues that would lose their quorum and availability if the target node is shut down).
+        Checks if there are quorum queues with minimum online quorum (queues that would
+        lose their quorum and availability if the target node is shut down).
         """
         try:
             return self._http_client.get(Paths.health.quorum_critical())

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 from rabbitmq_management.paths import Paths
 
@@ -41,14 +41,15 @@ class BindingsAPI(BaseAPI):
     ) -> str:
         """
         Create a new binding.
-        Optionally containing two fields, routing_key (a string) and arguments (a map of optional arguments):
+        Optionally containing two fields, routing_key (a string) and arguments
+        (a map of optional arguments):
 
         routing_key = "my_routing_key"
         arguments = {"x-arg": "value"}
 
         Return 'location' that telling you the URI of your new binding.
         """
-        payload = {}
+        payload: dict[str, Any] = {}
         if routing_key:
             payload["routing_key"] = routing_key
         if arguments:
@@ -117,14 +118,15 @@ class BindingsAPI(BaseAPI):
     ) -> str:
         """
         Create a new binding.
-        Optionally containing two fields, routing_key (a string) and arguments (a map of optional arguments):
+        Optionally containing two fields, routing_key (a string) and arguments
+        (a map of optional arguments):
 
         routing_key = "my_routing_key"
         arguments = {"x-arg": "value"}
 
         Return 'location' that telling you the URI of your new binding.
         """
-        payload = {}
+        payload: dict[str, Any] = {}
         if routing_key:
             payload["routing_key"] = routing_key
         if arguments:

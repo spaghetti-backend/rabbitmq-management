@@ -1,4 +1,5 @@
 import pytest
+
 from rabbitmq_management.paths import BasePath, Paths
 
 

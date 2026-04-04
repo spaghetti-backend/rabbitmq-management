@@ -38,13 +38,13 @@ async def test_get_extensions(
     async_management_api: api.AsyncRMQManagementAPI, api_mock: MockRouter
 ):
     api_mock.get("extensions").respond(
-        text='[{"javascript": "dispatcher.js"},{"javascript": "federation.js"},{"javascript": "shovel.js"}]'
+        text='[{"javascript": "dispatcher.js"},{"javascript": "federation.js"}]'
     )
 
     response = await async_management_api.extensions()
 
     assert isinstance(response, list)
-    assert len(response) == 3
+    assert len(response) == 2
     assert response[0].get("javascript") == "dispatcher.js"
 
 

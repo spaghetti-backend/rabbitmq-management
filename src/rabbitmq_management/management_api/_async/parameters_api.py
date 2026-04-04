@@ -1,5 +1,3 @@
-from typing import Any
-
 from rabbitmq_management.paths import Paths
 
 from .base_api import BaseAPI
@@ -36,7 +34,9 @@ class AsyncParametersAPI(BaseAPI):
             )
         )
 
-    async def set(self, component: str, vhost: str, parameter: str, value: Any) -> dict:
+    async def set(
+        self, component: str, vhost: str, parameter: str, value: dict
+    ) -> dict:
         """
         To set a parameter, you will need a 'value' looking something like this:
 
@@ -47,10 +47,12 @@ class AsyncParametersAPI(BaseAPI):
           "value":"guest"
         }
         """
-        payload = {"value": value}
-        payload["component"] = component
-        payload["vhost"] = vhost
-        payload["name"] = parameter
+        payload = {
+            "value": value,
+            "component": component,
+            "vhost": vhost,
+            "name": parameter,
+        }
 
         return await self._http_client.put(
             Paths.parameters.detail(
@@ -83,7 +85,7 @@ class AsyncParametersAPI(BaseAPI):
             Paths.parameters.global_parameters(parameter=parameter)
         )
 
-    async def set_global_parameter(self, parameter: str, value: Any) -> dict:
+    async def set_global_parameter(self, parameter: str, value: dict) -> dict:
         """
         To set a global parameter, you will need a 'value' looking something like this:
 
@@ -95,8 +97,7 @@ class AsyncParametersAPI(BaseAPI):
           }
         }
         """
-        payload = {"value": value}
-        payload["name"] = parameter
+        payload = {"value": value, "name": parameter}
 
         return await self._http_client.put(
             Paths.parameters.global_parameters(parameter=parameter),

@@ -12,7 +12,8 @@ class AsyncQueuesAPI(BaseAPI):
         The parameter 'enable_queue_totals=True' can be used in combination
         with the 'disable_stats=True' parameter to return a reduced set of fields and
         significantly reduce the amount of data returned by this endpoint.
-        That in turn can significantly reduce CPU and bandwidth footprint of such requests.
+        That in turn can significantly reduce CPU and bandwidth footprint
+        of such requests.
         """
         return await self._http_client.get(
             Paths.queues.all(
@@ -99,7 +100,8 @@ class AsyncQueuesAPI(BaseAPI):
         }
 
         'count' controls the maximum number of messages to get.
-        You may get fewer messages than this if the queue cannot immediately provide them.
+        You may get fewer messages than this if the queue cannot immediately
+        provide them.
 
         'ackmode' determines whether the messages will be removed from the queue.
         if ackmode is ack_requeue_true or reject_requeue_true they will be requeued
@@ -110,8 +112,8 @@ class AsyncQueuesAPI(BaseAPI):
         and base64 encoded otherwise),
         or "base64" (in which case the payload will always be base64 encoded).
 
-        If 'truncate' is present it will truncate the message payload if it is larger than
-        the size given (in bytes).
+        If 'truncate' is present it will truncate the message payload if it is larger
+        than the size given (in bytes).
 
         truncate is optional; all other keys are mandatory.
 

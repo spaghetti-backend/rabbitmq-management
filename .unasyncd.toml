@@ -1,8 +1,3 @@
-[tool.unasyncd]
-force_regen = true
-ruff_fix = true
-ruff_format = true
-
 [tool.unasyncd.files]
 "src/rabbitmq_management/http_clients/async_client.py" = "src/rabbitmq_management/http_clients/client.py"
 "src/rabbitmq_management/management_api/_async/" = "src/rabbitmq_management/management_api/_sync/"

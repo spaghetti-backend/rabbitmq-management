@@ -1,5 +1,3 @@
-from typing import Any
-
 from rabbitmq_management.paths import Paths
 
 from .base_api import BaseAPI
@@ -36,7 +34,7 @@ class ParametersAPI(BaseAPI):
             )
         )
 
-    def set(self, component: str, vhost: str, parameter: str, value: Any) -> dict:
+    def set(self, component: str, vhost: str, parameter: str, value: dict) -> dict:
         """
         To set a parameter, you will need a 'value' looking something like this:
 
@@ -47,10 +45,12 @@ class ParametersAPI(BaseAPI):
           "value":"guest"
         }
         """
-        payload = {"value": value}
-        payload["component"] = component
-        payload["vhost"] = vhost
-        payload["name"] = parameter
+        payload = {
+            "value": value,
+            "component": component,
+            "vhost": vhost,
+            "name": parameter,
+        }
 
         return self._http_client.put(
             Paths.parameters.detail(
@@ -83,7 +83,7 @@ class ParametersAPI(BaseAPI):
             Paths.parameters.global_parameters(parameter=parameter)
         )
 
-    def set_global_parameter(self, parameter: str, value: Any) -> dict:
+    def set_global_parameter(self, parameter: str, value: dict) -> dict:
         """
         To set a global parameter, you will need a 'value' looking something like this:
 
@@ -95,8 +95,7 @@ class ParametersAPI(BaseAPI):
           }
         }
         """
-        payload = {"value": value}
-        payload["name"] = parameter
+        payload = {"value": value, "name": parameter}
 
         return self._http_client.put(
             Paths.parameters.global_parameters(parameter=parameter),

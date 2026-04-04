@@ -32,13 +32,13 @@ def test_change_cluster_name(
 
 def test_get_extensions(management_api: api.RMQManagementAPI, api_mock: MockRouter):
     api_mock.get("extensions").respond(
-        text='[{"javascript": "dispatcher.js"},{"javascript": "federation.js"},{"javascript": "shovel.js"}]'
+        text='[{"javascript": "dispatcher.js"},{"javascript": "federation.js"}]'
     )
 
     response = management_api.extensions()
 
     assert isinstance(response, list)
-    assert len(response) == 3
+    assert len(response) == 2
     assert response[0].get("javascript") == "dispatcher.js"
 
 

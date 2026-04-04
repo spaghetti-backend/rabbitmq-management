@@ -1,4 +1,5 @@
 from typing import Optional
+
 import httpx
 import pytest
 from respx import MockRouter
@@ -32,10 +33,7 @@ def test_close_connection(
     management_api: api.RMQManagementAPI,
     api_mock: MockRouter,
 ):
-    if reason:
-        headers = {"X-Reason": reason}
-    else:
-        headers = {}
+    headers = {"X-Reason": reason} if reason else {}
 
     api_mock.delete("connections/tc", headers=headers).respond(
         status_code=httpx.codes.NO_CONTENT
@@ -60,10 +58,7 @@ def test_close_all_user_connections(
     management_api: api.RMQManagementAPI,
     api_mock: MockRouter,
 ):
-    if reason:
-        headers = {"X-Reason": reason}
-    else:
-        headers = {}
+    headers = {"X-Reason": reason} if reason else {}
 
     api_mock.delete("connections/username/tu", headers=headers).respond(
         status_code=httpx.codes.NO_CONTENT

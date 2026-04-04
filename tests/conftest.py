@@ -10,7 +10,7 @@ from rabbitmq_management.management_api import AsyncRMQManagementAPI, RMQManagem
 
 
 @pytest.fixture(scope="session")
-def api_url():
+def api_url() -> str:
     return "http://localhost:1234"
 
 

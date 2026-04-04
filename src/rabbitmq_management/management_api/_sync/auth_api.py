@@ -30,7 +30,9 @@ class AuthAPI(BaseAPI):
 
     def detail(self) -> dict:
         """
-        Details about the OAuth2 configuration. It will return HTTP status 200 with body:
+        Details about the OAuth2 configuration.
+
+        It will return HTTP status 200 with body:
         {
           "oauth_enabled":"boolean",
           "oauth_client_id":"string",
@@ -41,6 +43,7 @@ class AuthAPI(BaseAPI):
 
     def hash_password(self, password: str) -> dict:
         """
-        Hashes plaintext-password according to the currently configured password hashing algorithm
+        Hashes plaintext-password according to the currently configured password
+        hashing algorithm.
         """
         return self._http_client.get(Paths.auth.hash_password(password))

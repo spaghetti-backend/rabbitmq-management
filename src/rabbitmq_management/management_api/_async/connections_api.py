@@ -32,10 +32,7 @@ class AsyncConnectionsAPI(BaseAPI):
 
         Optionally set the 'reason' to provide a reason.
         """
-        if reason is not None:
-            headers = {"X-Reason": reason}
-        else:
-            headers = None
+        headers = {"X-Reason": reason} if reason is not None else None
 
         return await self._http_client.delete(
             Paths.connections.detail(connection), headers=headers
@@ -49,10 +46,7 @@ class AsyncConnectionsAPI(BaseAPI):
 
         Optionally set the 'reason' to provide a reason.
         """
-        if reason is not None:
-            headers = {"X-Reason": reason}
-        else:
-            headers = None
+        headers = {"X-Reason": reason} if reason is not None else None
 
         return await self._http_client.delete(
             Paths.connections.by_user(username=username), headers=headers
