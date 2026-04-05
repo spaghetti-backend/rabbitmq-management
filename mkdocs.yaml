@@ -1,0 +1,79 @@
+site_name: RMQ Management Client
+site_description: A simple Python client for RabbitMQ Management API.
+site_url: https://spaghetti-backend.github.io/rabbitmq-management/
+
+theme:
+  name: 'material'
+  palette:
+    - scheme: 'default'
+      primary: 'orange'
+      media: '(prefers-color-scheme: light)'
+      toggle:
+        icon: 'material/lightbulb'
+        name: "Switch to dark mode"
+    - scheme: 'slate'
+      primary: 'orange'
+      media: '(prefers-color-scheme: dark)'
+      toggle:
+        icon: 'material/lightbulb-outline'
+        name: 'Switch to light mode'
+  features:
+    - content.tabs.link
+
+extra_css:
+  - stylesheets/extra.css
+
+repo_name: rabbitmq-management
+repo_url: https://github.com/spaghetti-backend/rabbitmq-management
+
+nav:
+  - Introduction: 'index.md'
+  - QuickStart: 'quickstart.md'
+  - API Reference:
+      - Overview: 'api/overview.md'
+      - Management: 'api/management.md'
+      - Auth: 'api/auth.md'
+      - Bindings: 'api/bindings.md'
+      - Channels: 'api/channels.md'
+      - Connections: 'api/connections.md'
+      - Consumers: 'api/consumers.md'
+      - Definitions: 'api/definitions.md'
+      - Exchanges: 'api/exchanges.md'
+      - Health check: 'api/health.md'
+      - Nodes: 'api/nodes.md'
+      - Parameters: 'api/parameters.md'
+      - Permissions: 'api/permissions.md'
+      - Policies: 'api/policies.md'
+      - Queues: 'api/queues.md'
+      - Users: 'api/users.md'
+      - Virtual hosts: 'api/vhosts.md'
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            filters:
+              - "!^__"
+            show_source: false
+            show_signature_annotations: true
+            signature_crossrefs: true
+            show_root_full_path: false
+            show_root_toc_entry: false
+            show_root_heading: false
+            inherited_members: true
+            show_bases: false
