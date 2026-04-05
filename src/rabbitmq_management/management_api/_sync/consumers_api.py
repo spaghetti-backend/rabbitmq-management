@@ -4,14 +4,14 @@ from .base_api import BaseAPI
 
 
 class ConsumersAPI(BaseAPI):
+    """
+    Managing RabbitMQ consumers across the cluster.
+    """
+
     def all(self) -> list[dict]:
-        """
-        A list of all consumers
-        """
+        """List all consumers in the cluster."""
         return self._http_client.get(Paths.consumers.all())
 
-    def by_vhost(self, vhost: str) -> dict:
-        """
-        A list of all consumers in a given virtual host
-        """
+    def by_vhost(self, vhost: str) -> list[dict]:
+        """List all consumers in a specific virtual host."""
         return self._http_client.get(Paths.consumers.by_vhost(vhost=vhost))

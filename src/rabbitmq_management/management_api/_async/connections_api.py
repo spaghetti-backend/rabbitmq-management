@@ -6,21 +6,24 @@ from .base_api import BaseAPI
 
 
 class AsyncConnectionsAPI(BaseAPI):
+    """
+    Managing RabbitMQ TCP connections.
+    """
+
     async def all(self) -> list[dict]:
-        """
-        A list of all open connections.
-        """
+        """List all open connections in the cluster."""
         return await self._http_client.get(Paths.connections.all())
 
     async def by_user(self, username: str) -> list[dict]:
-        """
-        A list of all open connections for a specific username.
-        """
+        """List all open connections for a specific user."""
         return await self._http_client.get(Paths.connections.by_user(username=username))
 
     async def channels(self, connection: str) -> list[dict]:
         """
-        List of all channels for a given connection.
+        List all channels associated with a specific connection.
+
+        Args:
+            connection: The connection name (e.g., '127.0.0.1:54321 -> 127.0.0.1:5672').
         """
         return await self._http_client.get(
             Paths.connections.channels(connection=connection)
@@ -28,9 +31,10 @@ class AsyncConnectionsAPI(BaseAPI):
 
     async def close(self, connection: str, *, reason: Optional[str] = None) -> dict:
         """
-        Close the connection.
+        Forcefully close a specific connection.
 
-        Optionally set the 'reason' to provide a reason.
+        Args:
+            reason: Optional string provided to the client via 'X-Reason' header.
         """
         headers = {"X-Reason": reason} if reason is not None else None
 
@@ -42,9 +46,10 @@ class AsyncConnectionsAPI(BaseAPI):
         self, username: str, *, reason: Optional[str] = None
     ) -> dict:
         """
-        Close all the connections for a username.
+        Forcefully close all connections for a specific user.
 
-        Optionally set the 'reason' to provide a reason.
+        Args:
+            reason: Optional string provided to the client via 'X-Reason' header.
         """
         headers = {"X-Reason": reason} if reason is not None else None
 
@@ -53,9 +58,7 @@ class AsyncConnectionsAPI(BaseAPI):
         )
 
     async def detail(self, connection: str) -> dict:
-        """
-        An individual connection detailed information.
-        """
+        """Get detailed information about an individual connection."""
         return await self._http_client.get(
             Paths.connections.detail(connection=connection)
         )

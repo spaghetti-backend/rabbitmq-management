@@ -5,31 +5,27 @@ from .base_api import BaseAPI
 
 
 class TopicPermissionsAPI(BaseAPI):
+    """
+    Managing topic-based permissions for users in specific virtual hosts.
+    """
+
     def all(self) -> list[dict]:
-        """
-        A list of all topic permissions for all users.
-        """
+        """List all topic permissions across the cluster."""
         return self._http_client.get(Paths.permissions.topic.all())
 
     def detail(self, vhost: str, user: str) -> dict:
-        """
-        Topic permissions for a user and virtual host.
-        """
+        """Get topic permissions for a specific user and virtual host."""
         return self._http_client.get(
             Paths.permissions.topic.individual(vhost=vhost, username=user)
         )
 
     def set(self, vhost: str, user: str, value: dict) -> dict:
         """
-        To set a topic permission, you will need a 'value' looking something like this:
+        Create or update topic permissions for a user.
 
-        {
-          "exchange": "amq.topic",
-          "write": "^a",
-          "read": ".*"
-        }
-
-        All keys are mandatory.
+        Args:
+            value: A dict with mandatory 'exchange', 'write', and 'read' (regex
+                strings)
         """
         return self._http_client.put(
             Paths.permissions.topic.individual(vhost=vhost, username=user),
@@ -37,53 +33,45 @@ class TopicPermissionsAPI(BaseAPI):
         )
 
     def delete(self, vhost: str, user: str) -> dict:
-        """
-        Delete topic permission of a user and virtual host.
-        """
+        """Delete topic permissions for a specific user and virtual host."""
         return self._http_client.delete(
             Paths.permissions.topic.individual(vhost=vhost, username=user)
         )
 
 
 class AsyncPermissionsAPI(BaseAPI):
+    """
+    Managing standard user permissions and access to topic-based permissions.
+    """
+
     def __init__(self, http_client: http_clients.HTTPClient) -> None:
         super().__init__(http_client)
         self.topic = TopicPermissionsAPI(self._http_client)
 
     def all(self) -> list[dict]:
-        """
-        A list of all permissions for all users.
-        """
+        """List all standard user permissions in the cluster."""
         return self._http_client.get(Paths.permissions.all())
 
     def detail(self, vhost: str, user: str) -> dict:
-        """
-        An individual permission of a user and virtual host.
-        """
+        """Get standard permissions for a specific user and virtual host."""
         return self._http_client.get(
             Paths.permissions.individual(vhost=vhost, username=user)
         )
 
     def set(self, vhost: str, user: str, value: dict) -> dict:
         """
-        To set a permission, you will need a 'value' looking something like this:
+        Create or update standard permissions for a user.
 
-        {
-          "configure": ".*",
-          "write": ".*",
-          "read": ".*"
-        }
-
-        All keys are mandatory.
+        Args:
+            value: A dict with mandatory 'configure', 'write', and 'read' (regex
+                strings)
         """
         return self._http_client.put(
             Paths.permissions.individual(vhost=vhost, username=user), payload=value
         )
 
     def delete(self, vhost: str, user: str) -> dict:
-        """
-        Delete permission of a user and virtual host.
-        """
+        """Delete standard permissions for a specific user and virtual host."""
         return self._http_client.delete(
             Paths.permissions.individual(vhost=vhost, username=user)
         )

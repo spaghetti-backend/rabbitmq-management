@@ -29,6 +29,44 @@ if TYPE_CHECKING:
 
 
 class AsyncRMQManagementAPI:
+    """
+    Client for the RabbitMQ Management HTTP API.
+
+    This class provides a structured interface to manage a RabbitMQ cluster,
+    including vhosts, users, exchanges, queues, and health monitoring.
+    It supports both manual session management and asynchronous context managers.
+
+    Example:
+        ```python
+        async with AsyncRMQManagementAPI(
+            "http://localhost:15672", "guest", "guest"
+        ) as client:
+            overview = await client.overview()
+        ```
+        ```python
+        client = AsyncRMQManagementAPI("http://localhost:15672", "guest", "guest")
+        overview = await client.overview()
+        await client.close()
+        ```
+
+    Attributes:
+        auth: Authentication and security checks.
+        bindings: Exchange and queue bindings management.
+        channels: Active AMQP channels monitoring.
+        connections: Client TCP connections management.
+        consumers: Message consumers monitoring.
+        definitions: Import/Export of server definitions.
+        exchanges: Exchange management.
+        health: Cluster and node health checks.
+        nodes: Cluster nodes monitoring.
+        parameters: Runtime parameters and federation.
+        permissions: User permissions management.
+        policies: Runtime policies management.
+        queues: Queue management and messaging.
+        users: User account management.
+        vhosts: Virtual host management.
+    """
+
     def __init__(
         self,
         api_url: str,
@@ -39,6 +77,9 @@ class AsyncRMQManagementAPI:
         verify: ssl.SSLContext | str | bool = True,
         cert: http_clients.CertTypes | None = None,
     ) -> None:
+        """
+        Initialize the API client and all its sub-resources.
+        """
         self._http_client = http_clients.AsyncHTTPClient(
             api_url=f"{api_url}/api/",
             username=username,
@@ -64,6 +105,7 @@ class AsyncRMQManagementAPI:
         self.vhosts = vhosts_api.AsyncVHostsAPI(self._http_client)
 
     async def __aenter__(self) -> AsyncRMQManagementAPI:
+        """Enter the asynchronous context and return the client instance."""
         return self
 
     async def __aexit__(
@@ -72,59 +114,41 @@ class AsyncRMQManagementAPI:
         exc: BaseException,
         tb: TracebackType,
     ) -> None:
+        """Exit the context and ensure the HTTP session is closed."""
         await self.close()
 
     async def aliveness_test(self, vhost: str) -> dict:
         """
-        Declares a test queue on the target node,
-        then publishes and consumes a message.
-
-        Intended to be used as a very basic health check.
-
-        Responds a 200 OK if the check succeeded,
-        otherwise responds with a 503 Service Unavailable.
+        Execute a basic health check by publishing and consuming a test message.
         """
         return await self._http_client.get(Paths.aliveness_test(vhost))
 
     async def cluster_name(self) -> dict:
-        """
-        Name identifying this RabbitMQ cluster.
-        """
+        """Get the name identifying this RabbitMQ cluster."""
         return await self._http_client.get(Paths.cluster_name())
 
     async def change_cluster_name(self, name: str) -> dict:
-        """
-        Change the name identifying this RabbitMQ cluster.
-        """
+        """Update the cluster name."""
         return await self._http_client.put(Paths.cluster_name(), {"name": name})
 
     async def extensions(self) -> list[dict]:
-        """
-        A list of extensions to the management plugin.
-        """
+        """List all active management plugin extensions."""
         return await self._http_client.get(Paths.extensions())
 
     async def overview(self) -> dict:
-        """
-        Various random bits of information that describe the whole system.
-        """
+        """Get system-wide information (cluster state, versions, stats)."""
         return await self._http_client.get(Paths.overview())
 
     async def rebalance_queues(self) -> dict:
         """
-        Rebalances all queues in all vhosts.
-
-        This operation is asynchronous therefore please check
-        the RabbitMQ log file for messages regarding
-        the success or failure of the operation.
+        Trigger asynchronous queue rebalancing across all virtual hosts.
         """
         return await self._http_client.post(Paths.rebalance_queues())
 
     async def whoami(self) -> dict:
-        """
-        Details of the currently authenticated user.
-        """
+        """Get details of the currently authenticated user."""
         return await self._http_client.get(Paths.whoami())
 
     async def close(self) -> None:
+        """Close the underlying HTTP session and release resources."""
         await self._http_client.close()

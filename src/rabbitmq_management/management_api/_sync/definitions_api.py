@@ -4,59 +4,39 @@ from .base_api import BaseAPI
 
 
 class DefinitionsAPI(BaseAPI):
+    """
+    Import and export of RabbitMQ server definitions.
+    """
+
     def all(self) -> dict:
         """
-        The server definitions - exchanges, queues, bindings, users,
-        virtual hosts, permissions, topic permissions, and parameters.
-
-        Everything apart from messages.
+        Export all server definitions (exchanges, queues, users, vhosts, etc.).
         """
         return self._http_client.get(Paths.definitions.all())
 
     def by_vhost(self, vhost: str) -> dict:
         """
-        The server definitions for a given virtual host -
-        exchanges, queues, bindings and policies.
+        Export server definitions for a specific virtual host.
         """
         return self._http_client.get(Paths.definitions.by_vhost(vhost=vhost))
 
     def upload(self, definitions: dict) -> dict:
         """
-        Upload an existing set of definitions.
+        Upload and merge a set of server definitions.
 
-        Note that:
-        - The definitions are merged.
-        Anything already existing on the server but not in the uploaded
-        definitions is untouched.
-
-        - Conflicting definitions on immutable objects (exchanges, queues and bindings)
-        will be ignored. The existing definition will be preserved.
-
-        - Conflicting definitions on mutable objects will cause
-        the object in the server to be overwritten with the object from the definitions.
-
-        - In the event of an error you will be left with a part-applied
-          set of definitions.
+        Note:
+            Immutable objects (exchanges, queues) are ignored if they conflict.
+            Mutable objects are overwritten.
         """
         return self._http_client.post(Paths.definitions.all(), payload=definitions)
 
     def upload_vhosts_definitions(self, vhost: str, definitions: dict) -> dict:
         """
-        Upload an existing set of definitions.
+        Upload and merge definitions for a specific virtual host.
 
-        Note that:
-        - The definitions are merged.
-        Anything already existing on the server but not in the uploaded
-        definitions is untouched.
-
-        - Conflicting definitions on immutable objects (exchanges, queues and bindings)
-        will be ignored. The existing definition will be preserved.
-
-        - Conflicting definitions on mutable objects will cause
-        the object in the server to be overwritten with the object from the definitions.
-
-        - In the event of an error you will be left with a part-applied
-          set of definitions.
+        Note:
+            Immutable objects (exchanges, queues) are ignored if they conflict.
+            Mutable objects are overwritten.
         """
         return self._http_client.post(
             Paths.definitions.by_vhost(vhost=vhost), payload=definitions

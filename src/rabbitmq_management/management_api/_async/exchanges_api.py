@@ -6,27 +6,25 @@ from .base_api import BaseAPI
 
 
 class AsyncExchangesAPI(BaseAPI):
+    """
+    Managing RabbitMQ exchanges.
+    """
+
     async def all(self) -> list[dict]:
-        """
-        A list of all exchanges.
-        """
+        """List all exchanges in the cluster."""
         return await self._http_client.get(Paths.exchanges.all())
 
     async def by_vhost(self, vhost: str) -> list[dict]:
-        """
-        A list of all exchanges in a given virtual host.
-        """
+        """List all exchanges in a specific virtual host."""
         return await self._http_client.get(Paths.exchanges.by_vhost(vhost=vhost))
 
     async def detail(self, vhost: str, exchange: str) -> dict:
-        """
-        An individual exchange.
-        """
+        """Get details of a specific exchange."""
         return await self._http_client.get(
             Paths.exchanges.detail(vhost=vhost, exchange=exchange)
         )
 
-    async def create(
+    async def set(
         self,
         vhost: str,
         exchange: str,
@@ -38,9 +36,11 @@ class AsyncExchangesAPI(BaseAPI):
         arguments: Optional[dict] = None,
     ) -> dict:
         """
-        Create an exchange.
+        Create or update an exchange.
 
-        The 'type' key is mandatory; other keys are optional.
+        Args:
+            exchange_type: Type of exchange (e.g., 'direct', 'topic', 'fanout').
+            internal: If True, exchange cannot be used directly by publishers.
         """
         payload: dict[str, Any] = {"type": exchange_type}
         if auto_delete is not None:
@@ -62,25 +62,21 @@ class AsyncExchangesAPI(BaseAPI):
         """
         Delete an exchange.
 
-        The if_unused parameter prevents deletion if the exchange is bound to a queue or
-        used as a source by another exchange.
+        Args:
+            if_unused: If True, prevents deletion if the exchange has bindings.
         """
         return await self._http_client.delete(
             Paths.exchanges.detail(vhost=vhost, exchange=exchange, if_unused=if_unused)
         )
 
     async def source_bindings(self, vhost: str, exchange: str) -> list[dict]:
-        """
-        A list of all bindings in which a given exchange is the source.
-        """
+        """List all bindings where this exchange is the source."""
         return await self._http_client.get(
             Paths.exchanges.source_bindings(vhost=vhost, exchange=exchange)
         )
 
     async def destination_bindings(self, vhost: str, exchange: str) -> list[dict]:
-        """
-        A list of all bindings in which a given exchange is the destination.
-        """
+        """List all bindings where this exchange is the destination."""
         return await self._http_client.get(
             Paths.exchanges.destination_bindings(vhost=vhost, exchange=exchange)
         )

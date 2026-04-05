@@ -4,30 +4,26 @@ from .base_api import BaseAPI
 
 
 class AsyncParametersAPI(BaseAPI):
+    """
+    Managing vhost-scoped and global RabbitMQ parameters (e.g., federation, shovels).
+    """
+
     async def all(self) -> list[dict]:
-        """
-        A list of all vhost-scoped parameters.
-        """
+        """List all vhost-scoped parameters."""
         return await self._http_client.get(Paths.parameters.all())
 
     async def by_component(self, component: str) -> list[dict]:
-        """
-        A list of all vhost-scoped parameters for a given component.
-        """
+        """List all vhost-scoped parameters for a specific component."""
         return await self._http_client.get(Paths.parameters.by_component(component))
 
     async def component_by_vhost(self, component: str, vhost: str) -> list[dict]:
-        """
-        A list of all vhost-scoped parameters for a given component and virtual host.
-        """
+        """List parameters for a specific component within a virtual host."""
         return await self._http_client.get(
             Paths.parameters.by_vhost(component=component, vhost=vhost)
         )
 
     async def detail(self, component: str, vhost: str, parameter: str) -> dict:
-        """
-        An individual vhost-scoped parameter.
-        """
+        """Get details of an individual vhost-scoped parameter."""
         return await self._http_client.get(
             Paths.parameters.detail(
                 component=component, vhost=vhost, parameter=parameter
@@ -38,14 +34,10 @@ class AsyncParametersAPI(BaseAPI):
         self, component: str, vhost: str, parameter: str, value: dict
     ) -> dict:
         """
-        To set a parameter, you will need a 'value' looking something like this:
+        Create or update a vhost-scoped parameter.
 
-        {
-          "vhost": "/",
-          "component":"federation",
-          "name":"local_username",
-          "value":"guest"
-        }
+        Args:
+            value: The configuration value for the parameter.
         """
         payload = {
             "value": value,
@@ -62,9 +54,7 @@ class AsyncParametersAPI(BaseAPI):
         )
 
     async def delete(self, component: str, vhost: str, parameter: str) -> dict:
-        """
-        Delete the parameter.
-        """
+        """Delete a vhost-scoped parameter."""
         return await self._http_client.delete(
             Paths.parameters.detail(
                 component=component, vhost=vhost, parameter=parameter
@@ -72,30 +62,21 @@ class AsyncParametersAPI(BaseAPI):
         )
 
     async def global_parameters(self) -> list[dict]:
-        """
-        A list of all global parameters.
-        """
+        """List all global parameters."""
         return await self._http_client.get(Paths.parameters.global_parameters())
 
     async def global_parameter_detail(self, parameter: str) -> dict:
-        """
-        An individual global parameter.
-        """
+        """Get details of an individual global parameter."""
         return await self._http_client.get(
             Paths.parameters.global_parameters(parameter=parameter)
         )
 
     async def set_global_parameter(self, parameter: str, value: dict) -> dict:
         """
-        To set a global parameter, you will need a 'value' looking something like this:
+        Create or update a global parameter.
 
-        {
-          "name": "user_vhost_mapping",
-          "value": {
-            "guest": "/",
-            "rabbit":"warren"
-          }
-        }
+        Args:
+            value: The configuration value for the global parameter.
         """
         payload = {"value": value, "name": parameter}
 
@@ -105,9 +86,7 @@ class AsyncParametersAPI(BaseAPI):
         )
 
     async def delete_global_parameter(self, parameter: str) -> dict:
-        """
-        Delete the global parameter.
-        """
+        """Delete a global parameter."""
         return await self._http_client.delete(
             Paths.parameters.global_parameters(parameter=parameter)
         )

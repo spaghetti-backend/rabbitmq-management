@@ -4,16 +4,19 @@ from .base_api import BaseAPI
 
 
 class QueuesAPI(BaseAPI):
+    """
+    Managing RabbitMQ queues and their messages.
+    """
+
     def all(
         self, *, enable_queue_totals: bool = False, disable_stats: bool = False
     ) -> list[dict]:
         """
-        A list of all queues.
-        The parameter 'enable_queue_totals=True' can be used in combination
-        with the 'disable_stats=True' parameter to return a reduced set of fields and
-        significantly reduce the amount of data returned by this endpoint.
-        That in turn can significantly reduce CPU and bandwidth footprint
-        of such requests.
+        List all queues in the cluster.
+
+        Args:
+            enable_queue_totals: Return simplified set of fields.
+            disable_stats: Reduce CPU/bandwidth footprint by omitting detailed stats.
         """
         return self._http_client.get(
             Paths.queues.all(
@@ -22,59 +25,43 @@ class QueuesAPI(BaseAPI):
         )
 
     def by_vhost(self, vhost: str) -> list[dict]:
-        """
-        A list of all queues in a given virtual host.
-        """
+        """List all queues in a specific virtual host."""
         return self._http_client.get(Paths.queues.by_vhost(vhost=vhost))
 
     def detail(self, vhost: str, queue: str) -> dict:
-        """
-        An individual queue.
-        """
+        """Get details of a specific queue."""
         return self._http_client.get(Paths.queues.detail(vhost=vhost, queue=queue))
 
     def set(self, vhost: str, queue: str, value: dict) -> dict:
         """
-        To set a queue, you will need a body looking something like this:
+        Create or update a queue.
 
-        {
-          "auto_delete": False,
-          "durable": True,
-          "arguments": {},
-          "node": "test@rabbitmq"
-        }
-
-        All keys are optional.
+        Args:
+            value: Dict with optional keys: 'auto_delete', 'durable', 'arguments',
+                'node'.
         """
         return self._http_client.put(
             Paths.queues.detail(vhost=vhost, queue=queue), payload=value
         )
 
     def delete(self, vhost: str, queue: str) -> dict:
-        """
-        Delete the queues.
-        """
+        """Delete a specific queue."""
         return self._http_client.delete(Paths.queues.detail(vhost=vhost, queue=queue))
 
     def bindings(self, vhost: str, queue: str) -> list[dict]:
-        """
-        A list of all bindings on a given queue.
-        """
+        """List all bindings for a specific queue."""
         return self._http_client.get(Paths.queues.bindings(vhost=vhost, queue=queue))
 
     def purge(self, vhost: str, queue: str) -> dict:
-        """
-        Delete all messages from a queue.
-        """
+        """Remove all messages from the queue without deleting the queue itself."""
         return self._http_client.delete(Paths.queues.contents(vhost=vhost, queue=queue))
 
     def actions(self, vhost: str, queue: str, value: dict) -> dict:
         """
-        Actions that can be taken on a queue. Set a 'value' like:
+        Perform administrative actions on a queue.
 
-        {"action":"sync"}
-
-        Currently the actions which are supported are sync and cancel_sync.
+        Args:
+            value: Dict with 'action' (e.g., {"action": "sync"} or "cancel_sync").
         """
         return self._http_client.post(
             Paths.queues.actions(vhost=vhost, queue=queue), payload=value
@@ -82,36 +69,14 @@ class QueuesAPI(BaseAPI):
 
     def messages(self, vhost: str, queue: str, value: dict) -> list[dict]:
         """
-        Get messages from a queue. You should set a 'value' looking like:
+        Fetch messages from a queue for diagnostic purposes.
 
-        {
-          "count": 5,
-          "ackmode": "ack_requeue_true",
-          "encoding": "auto",
-          "truncate": 50000
-        }
+        Args:
+            value: Dict with 'count', 'ackmode' (e.g., 'ack_requeue_true'),
+                   'encoding', and optional 'truncate'.
 
-        'count' controls the maximum number of messages to get.
-        You may get fewer messages than this if the queue cannot immediately
-        provide them.
-
-        'ackmode' determines whether the messages will be removed from the queue.
-        if ackmode is ack_requeue_true or reject_requeue_true they will be requeued
-        if ackmode is ack_requeue_false or reject_requeue_false they will be removed.
-
-        'encoding' must be either "auto"
-        (in which case the payload will be returned as a string if it is valid UTF-8,
-        and base64 encoded otherwise),
-        or "base64" (in which case the payload will always be base64 encoded).
-
-        If 'truncate' is present it will truncate the message payload if it is larger
-        than the size given (in bytes).
-
-        truncate is optional; all other keys are mandatory.
-
-        Please note that the get path in the HTTP API is intended for diagnostics etc
-        it does not implement reliable delivery and so should be treated as
-        a sysadmin's tool rather than a general API for messaging.
+        Note:
+            This is a management tool, not a high-performance messaging API.
         """
         return self._http_client.post(
             Paths.queues.messages(vhost=vhost, queue=queue), payload=value
