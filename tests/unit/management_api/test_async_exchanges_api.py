@@ -48,7 +48,7 @@ async def test_create_exchange(
         },
     ).respond(status_code=httpx.codes.CREATED)
 
-    await async_management_api.exchanges.create(
+    await async_management_api.exchanges.set(
         vhost="/",
         exchange="new_exch",
         exchange_type="direct",

@@ -44,7 +44,7 @@ def test_create_exchange(management_api: api.RMQManagementAPI, api_mock: MockRou
         },
     ).respond(status_code=httpx.codes.CREATED)
 
-    management_api.exchanges.create(
+    management_api.exchanges.set(
         vhost="/",
         exchange="new_exch",
         exchange_type="direct",
