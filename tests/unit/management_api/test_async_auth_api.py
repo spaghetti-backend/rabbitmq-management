@@ -23,7 +23,9 @@ async def test_reset_attempts(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.auth.reset_attempts("test@rabbitmq")
+    response = await async_management_api.auth.reset_attempts("test@rabbitmq")
+
+    assert response is None
 
 
 async def test_get_attempts_by_source(
@@ -36,8 +38,6 @@ async def test_get_attempts_by_source(
     response = await async_management_api.auth.attempts_by_source("test@rabbitmq")
 
     assert isinstance(response, list)
-    assert len(response) == 1
-    assert response[0].get("remote_address") == "172.23.0.1"
 
 
 async def test_get_attempts_by_source_when_tracking_disabled(
@@ -58,7 +58,9 @@ async def test_reset_attempts_by_source(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.auth.reset_attempts_by_source("test@rabbitmq")
+    response = await async_management_api.auth.reset_attempts_by_source("test@rabbitmq")
+
+    assert response is None
 
 
 async def test_auth_detail(

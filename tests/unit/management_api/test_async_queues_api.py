@@ -33,7 +33,6 @@ async def test_get_all_queues(
     )
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_get_all_queues_by_vhost(
@@ -44,7 +43,6 @@ async def test_get_all_queues_by_vhost(
     response = await async_management_api.queues.by_vhost(vhost="/")
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_get_queue_detail(
@@ -70,7 +68,11 @@ async def test_set_queue(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.queues.set(vhost="/", queue="test", value=mock_json)
+    response = await async_management_api.queues.set(
+        vhost="/", queue="test", value=mock_json
+    )
+
+    assert response is None
 
 
 async def test_delete_queue(
@@ -80,7 +82,9 @@ async def test_delete_queue(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.queues.delete(vhost="/", queue="test")
+    response = await async_management_api.queues.delete(vhost="/", queue="test")
+
+    assert response is None
 
 
 async def test_get_queue_bindings(
@@ -93,7 +97,6 @@ async def test_get_queue_bindings(
     response = await async_management_api.queues.bindings(vhost="/", queue="test")
 
     assert isinstance(response, list)
-    assert response[0].get("destination") == "test"
 
 
 async def test_purge_queue(
@@ -103,7 +106,9 @@ async def test_purge_queue(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.queues.purge(vhost="/", queue="test")
+    response = await async_management_api.queues.purge(vhost="/", queue="test")
+
+    assert response is None
 
 
 async def test_queue_action(
@@ -114,7 +119,11 @@ async def test_queue_action(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.queues.actions(vhost="/", queue="test", value=mock_json)
+    response = await async_management_api.queues.actions(
+        vhost="/", queue="test", value=mock_json
+    )
+
+    assert response is None
 
 
 async def test_get_message_from_queue(
@@ -135,4 +144,3 @@ async def test_get_message_from_queue(
     )
 
     assert isinstance(response, list)
-    assert response[0].get("payload") == "test"

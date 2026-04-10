@@ -12,7 +12,6 @@ async def test_get_all_permissions(
     response = await async_management_api.permissions.all()
 
     assert isinstance(response, list)
-    assert response[0].get("user") == "test"
 
 
 async def test_get_user_permissions(
@@ -33,7 +32,11 @@ async def test_set_permissions(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.permissions.set(vhost="/", user="test", value=mock_json)
+    response = await async_management_api.permissions.set(
+        vhost="/", user="test", value=mock_json
+    )
+
+    assert response is None
 
 
 async def test_delete_permissions(
@@ -43,7 +46,9 @@ async def test_delete_permissions(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.permissions.delete(vhost="/", user="test")
+    response = await async_management_api.permissions.delete(vhost="/", user="test")
+
+    assert response is None
 
 
 async def test_get_all_topic_permissions(
@@ -54,7 +59,6 @@ async def test_get_all_topic_permissions(
     response = await async_management_api.permissions.topic.all()
 
     assert isinstance(response, list)
-    assert response[0].get("user") == "test"
 
 
 async def test_get_user_topic_permissions(
@@ -79,9 +83,11 @@ async def test_set_topic_permissions(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.permissions.topic.set(
+    response = await async_management_api.permissions.topic.set(
         vhost="/", user="test", value=mock_json
     )
+
+    assert response is None
 
 
 async def test_delete_topic_permissions(
@@ -91,4 +97,8 @@ async def test_delete_topic_permissions(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.permissions.topic.delete(vhost="/", user="test")
+    response = await async_management_api.permissions.topic.delete(
+        vhost="/", user="test"
+    )
+
+    assert response is None

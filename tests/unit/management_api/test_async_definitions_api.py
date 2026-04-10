@@ -22,7 +22,9 @@ async def test_upload_broker_definitions(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.definitions.upload(definitions=mock_json)
+    response = await async_management_api.definitions.upload(definitions=mock_json)
+
+    assert response is None
 
 
 async def test_get_all_definitions_by_vhost(
@@ -45,6 +47,8 @@ async def test_upload_vhosts_definitions(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.definitions.upload_vhosts_definitions(
+    response = await async_management_api.definitions.upload_vhosts_definitions(
         vhost="/", definitions=mock_json
     )
+
+    assert response is None

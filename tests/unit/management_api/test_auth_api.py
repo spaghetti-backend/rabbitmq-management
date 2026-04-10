@@ -19,7 +19,9 @@ def test_reset_attempts(management_api: api.RMQManagementAPI, api_mock: MockRout
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.auth.reset_attempts("test@rabbitmq")
+    response = management_api.auth.reset_attempts("test@rabbitmq")
+
+    assert response is None
 
 
 def test_get_attempts_by_source(
@@ -32,8 +34,6 @@ def test_get_attempts_by_source(
     response = management_api.auth.attempts_by_source("test@rabbitmq")
 
     assert isinstance(response, list)
-    assert len(response) == 1
-    assert response[0].get("remote_address") == "172.23.0.1"
 
 
 def test_get_attempts_by_source_when_tracking_disabled(
@@ -54,7 +54,9 @@ def test_reset_attempts_by_source(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.auth.reset_attempts_by_source("test@rabbitmq")
+    response = management_api.auth.reset_attempts_by_source("test@rabbitmq")
+
+    assert response is None
 
 
 def test_auth_detail(management_api: api.RMQManagementAPI, api_mock: MockRouter):

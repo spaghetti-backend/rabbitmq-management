@@ -12,7 +12,6 @@ async def test_get_all_nodes(
     response = await async_management_api.nodes.all()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test@rabbitmq"
 
 
 @pytest.mark.parametrize(

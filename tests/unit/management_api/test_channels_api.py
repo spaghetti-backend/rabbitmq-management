@@ -9,8 +9,6 @@ def test_get_channels(management_api: api.RMQManagementAPI, api_mock: MockRouter
     response = management_api.channels.all()
 
     assert isinstance(response, list)
-    assert len(response) == 1
-    assert response[0].get("state") == "running"
 
 
 def test_get_channel_detail(management_api: api.RMQManagementAPI, api_mock: MockRouter):

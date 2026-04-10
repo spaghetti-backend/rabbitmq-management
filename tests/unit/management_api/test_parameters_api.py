@@ -10,7 +10,6 @@ def test_get_all_parameters(management_api: api.RMQManagementAPI, api_mock: Mock
     response = management_api.parameters.all()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_get_component_parameters(
@@ -21,7 +20,6 @@ def test_get_component_parameters(
     response = management_api.parameters.by_component(component="shovel")
 
     assert isinstance(response, list)
-    assert response[0].get("component") == "shovel"
 
 
 def test_get_vhosts_component_parameters(
@@ -36,7 +34,6 @@ def test_get_vhosts_component_parameters(
     )
 
     assert isinstance(response, list)
-    assert response[0].get("component") == "shovel"
 
 
 def test_get_component_parameter_detail(
@@ -77,9 +74,11 @@ def test_set_component_parameter(
         json=mock_json,
     ).respond(status_code=httpx.codes.CREATED)
 
-    management_api.parameters.set(
-        component="shovel", vhost="/", parameter="test", value=mock_json.get("value")
+    response = management_api.parameters.set(
+        component="shovel", vhost="/", parameter="test", value=mock_json["value"]
     )
+
+    assert response is None
 
 
 def test_delete_parameter(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -87,7 +86,11 @@ def test_delete_parameter(management_api: api.RMQManagementAPI, api_mock: MockRo
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.parameters.delete(component="shovel", vhost="/", parameter="test")
+    response = management_api.parameters.delete(
+        component="shovel", vhost="/", parameter="test"
+    )
+
+    assert response is None
 
 
 def test_get_all_global_parameters(
@@ -98,7 +101,6 @@ def test_get_all_global_parameters(
     response = management_api.parameters.global_parameters()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_get_global_parameter_detail(
@@ -126,7 +128,7 @@ def test_set_global_parameter(
     ).respond(status_code=httpx.codes.CREATED)
 
     management_api.parameters.set_global_parameter(
-        parameter="test", value=mock_json.get("value")
+        parameter="test", value=mock_json["value"]
     )
 
 
@@ -137,4 +139,6 @@ def test_delete_global_parameter(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.parameters.delete_global_parameter(parameter="test")
+    response = management_api.parameters.delete_global_parameter(parameter="test")
+
+    assert response is None

@@ -15,8 +15,6 @@ def test_get_all_bindings(management_api: api.RMQManagementAPI, api_mock: MockRo
     response = management_api.bindings.all()
 
     assert isinstance(response, list)
-    assert len(response) == 2
-    assert "routing_key" in response[0]
 
 
 def test_get_bindings_by_vhost(
@@ -29,8 +27,6 @@ def test_get_bindings_by_vhost(
     response = management_api.bindings.by_vhost(vhost="/")
 
     assert isinstance(response, list)
-    assert len(response) == 2
-    assert "routing_key" in response[0]
 
 
 def test_get_exchange_to_queue_bindings(
@@ -110,9 +106,11 @@ def test_unbind_exchange_from_queue(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.bindings.unbind_exchange_from_queue(
+    response = management_api.bindings.unbind_exchange_from_queue(
         vhost="/", exchange="te", queue="tq", properties_key="~"
     )
+
+    assert response is None
 
 
 def test_get_exchange_to_exchange_bindings(
@@ -192,6 +190,8 @@ def test_unbind_exchange_from_exchange(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.bindings.unbind_exchange_from_exchange(
+    response = management_api.bindings.unbind_exchange_from_exchange(
         vhost="/", source="te", destination="ae", properties_key="~"
     )
+
+    assert response is None

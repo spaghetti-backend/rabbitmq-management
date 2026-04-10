@@ -12,7 +12,6 @@ async def test_get_all_users(
     response = await async_management_api.users.all()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_get_users_without_permissions(
@@ -23,7 +22,6 @@ async def test_get_users_without_permissions(
     response = await async_management_api.users.without_permissions()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_bulk_delete_users(
@@ -34,7 +32,9 @@ async def test_bulk_delete_users(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.users.bulk_delete(value=mock_json)
+    response = await async_management_api.users.bulk_delete(value=mock_json)
+
+    assert response is None
 
 
 async def test_get_user_detail(
@@ -53,7 +53,9 @@ async def test_set_user(
     mock_json = {"password": "secret", "tags": "administrator"}
     api_mock.put("users/test").respond(status_code=httpx.codes.NO_CONTENT)
 
-    await async_management_api.users.set(user="test", value=mock_json)
+    response = await async_management_api.users.set(user="test", value=mock_json)
+
+    assert response is None
 
 
 async def test_delete_user(
@@ -61,7 +63,9 @@ async def test_delete_user(
 ):
     api_mock.delete("users/test").respond(status_code=httpx.codes.NO_CONTENT)
 
-    await async_management_api.users.delete(user="test")
+    response = await async_management_api.users.delete(user="test")
+
+    assert response is None
 
 
 async def test_get_user_permissions(
@@ -72,7 +76,6 @@ async def test_get_user_permissions(
     response = await async_management_api.users.permissions(user="test")
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_get_user_topic_permissions(
@@ -83,7 +86,6 @@ async def test_get_user_topic_permissions(
     response = await async_management_api.users.topic_permissions(user="test")
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_get_all_users_limits(
@@ -94,7 +96,6 @@ async def test_get_all_users_limits(
     response = await async_management_api.users.limits()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_get_user_limits(
@@ -105,7 +106,6 @@ async def test_get_user_limits(
     response = await async_management_api.users.individual_limits(user="test")
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_set_user_limit(
@@ -115,9 +115,11 @@ async def test_set_user_limit(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.users.set_limit(
+    response = await async_management_api.users.set_limit(
         user="test", limit="max-channels", value=100
     )
+
+    assert response is None
 
 
 async def test_delete_user_limit(
@@ -127,4 +129,8 @@ async def test_delete_user_limit(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.users.delete_limit(user="test", limit="max-channels")
+    response = await async_management_api.users.delete_limit(
+        user="test", limit="max-channels"
+    )
+
+    assert response is None

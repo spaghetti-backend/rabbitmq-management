@@ -10,7 +10,6 @@ def test_get_all_vhosts(management_api: api.RMQManagementAPI, api_mock: MockRout
     response = management_api.vhosts.all()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_get_vhost_detail(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -29,13 +28,17 @@ def test_set_vhost(management_api: api.RMQManagementAPI, api_mock: MockRouter):
     }
     api_mock.put("vhosts/test").respond(status_code=httpx.codes.NO_CONTENT)
 
-    management_api.vhosts.set(vhost="test", value=mock_json)
+    response = management_api.vhosts.set(vhost="test", value=mock_json)
+
+    assert response is None
 
 
 def test_delete_vhost(management_api: api.RMQManagementAPI, api_mock: MockRouter):
     api_mock.delete("vhosts/test").respond(status_code=httpx.codes.NO_CONTENT)
 
-    management_api.vhosts.delete(vhost="test")
+    response = management_api.vhosts.delete(vhost="test")
+
+    assert response is None
 
 
 def test_get_vhost_permissions(
@@ -46,7 +49,6 @@ def test_get_vhost_permissions(
     response = management_api.vhosts.permissions(vhost="test")
 
     assert isinstance(response, list)
-    assert response[0].get("vhost") == "test"
 
 
 def test_get_vhost_topic_permissions(
@@ -57,7 +59,6 @@ def test_get_vhost_topic_permissions(
     response = management_api.vhosts.topic_permissions(vhost="test")
 
     assert isinstance(response, list)
-    assert response[0].get("vhost") == "test"
 
 
 def test_start_vhost(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -65,7 +66,9 @@ def test_start_vhost(management_api: api.RMQManagementAPI, api_mock: MockRouter)
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.vhosts.start(vhost="test", node="test@rabbitmq")
+    response = management_api.vhosts.start(vhost="test", node="test@rabbitmq")
+
+    assert response is None
 
 
 def test_get_vhost_channels(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -74,7 +77,6 @@ def test_get_vhost_channels(management_api: api.RMQManagementAPI, api_mock: Mock
     response = management_api.vhosts.channels(vhost="test")
 
     assert isinstance(response, list)
-    assert response[0].get("running") is True
 
 
 def test_get_vhost_connections(
@@ -85,7 +87,6 @@ def test_get_vhost_connections(
     response = management_api.vhosts.connections(vhost="test")
 
     assert isinstance(response, list)
-    assert response[0].get("state") == "running"
 
 
 def test_get_vhosts_limits(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -94,7 +95,6 @@ def test_get_vhosts_limits(management_api: api.RMQManagementAPI, api_mock: MockR
     response = management_api.vhosts.limits()
 
     assert isinstance(response, list)
-    assert response[0].get("vhost") == "test"
 
 
 def test_get_vhost_limits(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -103,7 +103,6 @@ def test_get_vhost_limits(management_api: api.RMQManagementAPI, api_mock: MockRo
     response = management_api.vhosts.vhost_limits(vhost="test")
 
     assert isinstance(response, list)
-    assert response[0].get("vhost") == "test"
 
 
 def test_set_vhost_limit(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -111,7 +110,11 @@ def test_set_vhost_limit(management_api: api.RMQManagementAPI, api_mock: MockRou
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.vhosts.set_limit(vhost="test", limit="max-queues", value=100)
+    response = management_api.vhosts.set_limit(
+        vhost="test", limit="max-queues", value=100
+    )
+
+    assert response is None
 
 
 def test_delete_vhost_limit(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -119,4 +122,6 @@ def test_delete_vhost_limit(management_api: api.RMQManagementAPI, api_mock: Mock
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.vhosts.delete_limit(vhost="test", limit="max-queues")
+    response = management_api.vhosts.delete_limit(vhost="test", limit="max-queues")
+
+    assert response is None

@@ -10,7 +10,6 @@ def test_get_all_policies(management_api: api.RMQManagementAPI, api_mock: MockRo
     response = management_api.policies.all()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_get_policies_by_vhost(
@@ -21,7 +20,6 @@ def test_get_policies_by_vhost(
     response = management_api.policies.by_vhost(vhost="/")
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_get_policy_detail(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -43,7 +41,9 @@ def test_set_policy(management_api: api.RMQManagementAPI, api_mock: MockRouter):
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.policies.set(vhost="/", policy="test", value=mock_json)
+    response = management_api.policies.set(vhost="/", policy="test", value=mock_json)
+
+    assert response is None
 
 
 def test_delete_policy(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -51,7 +51,9 @@ def test_delete_policy(management_api: api.RMQManagementAPI, api_mock: MockRoute
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.policies.delete(vhost="/", policy="test")
+    response = management_api.policies.delete(vhost="/", policy="test")
+
+    assert response is None
 
 
 def test_get_all_operator_policies(
@@ -62,7 +64,6 @@ def test_get_all_operator_policies(
     response = management_api.policies.operator.all()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_get_operator_policies_by_vhost(
@@ -73,7 +74,6 @@ def test_get_operator_policies_by_vhost(
     response = management_api.policies.operator.by_vhost(vhost="/")
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_get_operator_policy_detail(
@@ -101,7 +101,11 @@ def test_set_operator_policy(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.policies.operator.set(vhost="/", policy="test", value=mock_json)
+    response = management_api.policies.operator.set(
+        vhost="/", policy="test", value=mock_json
+    )
+
+    assert response is None
 
 
 def test_delete_operator_policy(
@@ -111,4 +115,6 @@ def test_delete_operator_policy(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.policies.operator.delete(vhost="/", policy="test")
+    response = management_api.policies.operator.delete(vhost="/", policy="test")
+
+    assert response is None

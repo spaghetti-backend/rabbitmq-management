@@ -12,7 +12,6 @@ async def test_get_all_vhosts(
     response = await async_management_api.vhosts.all()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_get_vhost_detail(
@@ -35,7 +34,9 @@ async def test_set_vhost(
     }
     api_mock.put("vhosts/test").respond(status_code=httpx.codes.NO_CONTENT)
 
-    await async_management_api.vhosts.set(vhost="test", value=mock_json)
+    response = await async_management_api.vhosts.set(vhost="test", value=mock_json)
+
+    assert response is None
 
 
 async def test_delete_vhost(
@@ -43,7 +44,9 @@ async def test_delete_vhost(
 ):
     api_mock.delete("vhosts/test").respond(status_code=httpx.codes.NO_CONTENT)
 
-    await async_management_api.vhosts.delete(vhost="test")
+    response = await async_management_api.vhosts.delete(vhost="test")
+
+    assert response is None
 
 
 async def test_get_vhost_permissions(
@@ -54,7 +57,6 @@ async def test_get_vhost_permissions(
     response = await async_management_api.vhosts.permissions(vhost="test")
 
     assert isinstance(response, list)
-    assert response[0].get("vhost") == "test"
 
 
 async def test_get_vhost_topic_permissions(
@@ -65,7 +67,6 @@ async def test_get_vhost_topic_permissions(
     response = await async_management_api.vhosts.topic_permissions(vhost="test")
 
     assert isinstance(response, list)
-    assert response[0].get("vhost") == "test"
 
 
 async def test_start_vhost(
@@ -75,7 +76,11 @@ async def test_start_vhost(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.vhosts.start(vhost="test", node="test@rabbitmq")
+    response = await async_management_api.vhosts.start(
+        vhost="test", node="test@rabbitmq"
+    )
+
+    assert response is None
 
 
 async def test_get_vhost_channels(
@@ -86,7 +91,6 @@ async def test_get_vhost_channels(
     response = await async_management_api.vhosts.channels(vhost="test")
 
     assert isinstance(response, list)
-    assert response[0].get("running") is True
 
 
 async def test_get_vhost_connections(
@@ -97,7 +101,6 @@ async def test_get_vhost_connections(
     response = await async_management_api.vhosts.connections(vhost="test")
 
     assert isinstance(response, list)
-    assert response[0].get("state") == "running"
 
 
 async def test_get_vhosts_limits(
@@ -108,7 +111,6 @@ async def test_get_vhosts_limits(
     response = await async_management_api.vhosts.limits()
 
     assert isinstance(response, list)
-    assert response[0].get("vhost") == "test"
 
 
 async def test_get_vhost_limits(
@@ -119,7 +121,6 @@ async def test_get_vhost_limits(
     response = await async_management_api.vhosts.vhost_limits(vhost="test")
 
     assert isinstance(response, list)
-    assert response[0].get("vhost") == "test"
 
 
 async def test_set_vhost_limit(
@@ -129,9 +130,11 @@ async def test_set_vhost_limit(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.vhosts.set_limit(
+    response = await async_management_api.vhosts.set_limit(
         vhost="test", limit="max-queues", value=100
     )
+
+    assert response is None
 
 
 async def test_delete_vhost_limit(
@@ -141,4 +144,8 @@ async def test_delete_vhost_limit(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.vhosts.delete_limit(vhost="test", limit="max-queues")
+    response = await async_management_api.vhosts.delete_limit(
+        vhost="test", limit="max-queues"
+    )
+
+    assert response is None

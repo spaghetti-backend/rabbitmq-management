@@ -60,6 +60,7 @@ class HTTPClient:
         *,
         payload: dict | None = None,
         headers: dict | None = None,
+        return_headers: bool = False,
     ) -> Any:
         try:
             request = self.client.build_request(
@@ -71,8 +72,10 @@ class HTTPClient:
             response = self.client.send(request)
             response.raise_for_status()
 
-            if not response.content:
-                return {"status": "success", "headers": response.headers}
+            if return_headers:
+                return response.headers
+            elif not response.content:
+                return None
 
             return response.json()
         except httpx.TimeoutException as e:
@@ -99,8 +102,12 @@ class HTTPClient:
     def get(self, path: str) -> Any:
         return self._request("GET", path=path)
 
-    def post(self, path: str, payload: dict | None = None) -> Any:
-        return self._request("POST", path=path, payload=payload)
+    def post(
+        self, path: str, payload: dict | None = None, return_headers: bool = False
+    ) -> Any:
+        return self._request(
+            "POST", path=path, payload=payload, return_headers=return_headers
+        )
 
     def put(self, path: str, payload: dict | None = None) -> dict:
         return self._request("PUT", path=path, payload=payload)

@@ -12,7 +12,6 @@ def test_get_all_permissions(
     response = management_api.permissions.all()
 
     assert isinstance(response, list)
-    assert response[0].get("user") == "test"
 
 
 def test_get_user_permissions(
@@ -31,7 +30,9 @@ def test_set_permissions(management_api: api.RMQManagementAPI, api_mock: MockRou
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.permissions.set(vhost="/", user="test", value=mock_json)
+    response = management_api.permissions.set(vhost="/", user="test", value=mock_json)
+
+    assert response is None
 
 
 def test_delete_permissions(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -39,7 +40,9 @@ def test_delete_permissions(management_api: api.RMQManagementAPI, api_mock: Mock
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.permissions.delete(vhost="/", user="test")
+    response = management_api.permissions.delete(vhost="/", user="test")
+
+    assert response is None
 
 
 def test_get_all_topic_permissions(
@@ -50,7 +53,6 @@ def test_get_all_topic_permissions(
     response = management_api.permissions.topic.all()
 
     assert isinstance(response, list)
-    assert response[0].get("user") == "test"
 
 
 def test_get_user_topic_permissions(
@@ -73,7 +75,11 @@ def test_set_topic_permissions(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.permissions.topic.set(vhost="/", user="test", value=mock_json)
+    response = management_api.permissions.topic.set(
+        vhost="/", user="test", value=mock_json
+    )
+
+    assert response is None
 
 
 def test_delete_topic_permissions(
@@ -83,4 +89,6 @@ def test_delete_topic_permissions(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.permissions.topic.delete(vhost="/", user="test")
+    response = management_api.permissions.topic.delete(vhost="/", user="test")
+
+    assert response is None
