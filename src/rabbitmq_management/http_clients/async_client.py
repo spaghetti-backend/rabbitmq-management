@@ -60,6 +60,7 @@ class AsyncHTTPClient:
         *,
         payload: dict | None = None,
         headers: dict | None = None,
+        return_headers: bool = False,
     ) -> Any:
         try:
             request = self.client.build_request(
@@ -71,8 +72,10 @@ class AsyncHTTPClient:
             response = await self.client.send(request)
             response.raise_for_status()
 
-            if not response.content:
-                return {"status": "success", "headers": response.headers}
+            if return_headers:
+                return response.headers
+            elif not response.content:
+                return None
 
             return response.json()
         except httpx.TimeoutException as e:
@@ -99,8 +102,12 @@ class AsyncHTTPClient:
     async def get(self, path: str) -> Any:
         return await self._request("GET", path=path)
 
-    async def post(self, path: str, payload: dict | None = None) -> Any:
-        return await self._request("POST", path=path, payload=payload)
+    async def post(
+        self, path: str, payload: dict | None = None, return_headers: bool = False
+    ) -> Any:
+        return await self._request(
+            "POST", path=path, payload=payload, return_headers=return_headers
+        )
 
     async def put(self, path: str, payload: dict | None = None) -> dict:
         return await self._request("PUT", path=path, payload=payload)

@@ -32,7 +32,7 @@ async def test_succuss_with_no_content(
 
     response = await async_http_client.delete("users/test")
 
-    assert response.get("status") == "success"
+    assert response is None
 
 
 async def test_timeout_wraps_with_rmq_network_error(

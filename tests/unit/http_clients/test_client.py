@@ -28,7 +28,7 @@ def test_succuss_with_no_content(http_client: client.HTTPClient, api_mock: MockR
 
     response = http_client.delete("users/test")
 
-    assert response.get("status") == "success"
+    assert response is None
 
 
 def test_timeout_wraps_with_rmq_network_error(

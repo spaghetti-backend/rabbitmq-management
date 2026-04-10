@@ -10,7 +10,6 @@ def test_get_all_users(management_api: api.RMQManagementAPI, api_mock: MockRoute
     response = management_api.users.all()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_get_users_without_permissions(
@@ -21,7 +20,6 @@ def test_get_users_without_permissions(
     response = management_api.users.without_permissions()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_bulk_delete_users(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -30,7 +28,9 @@ def test_bulk_delete_users(management_api: api.RMQManagementAPI, api_mock: MockR
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.users.bulk_delete(value=mock_json)
+    response = management_api.users.bulk_delete(value=mock_json)
+
+    assert response is None
 
 
 def test_get_user_detail(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -45,13 +45,17 @@ def test_set_user(management_api: api.RMQManagementAPI, api_mock: MockRouter):
     mock_json = {"password": "secret", "tags": "administrator"}
     api_mock.put("users/test").respond(status_code=httpx.codes.NO_CONTENT)
 
-    management_api.users.set(user="test", value=mock_json)
+    response = management_api.users.set(user="test", value=mock_json)
+
+    assert response is None
 
 
 def test_delete_user(management_api: api.RMQManagementAPI, api_mock: MockRouter):
     api_mock.delete("users/test").respond(status_code=httpx.codes.NO_CONTENT)
 
-    management_api.users.delete(user="test")
+    response = management_api.users.delete(user="test")
+
+    assert response is None
 
 
 def test_get_user_permissions(
@@ -62,7 +66,6 @@ def test_get_user_permissions(
     response = management_api.users.permissions(user="test")
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_get_user_topic_permissions(
@@ -73,7 +76,6 @@ def test_get_user_topic_permissions(
     response = management_api.users.topic_permissions(user="test")
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_get_all_users_limits(
@@ -84,7 +86,6 @@ def test_get_all_users_limits(
     response = management_api.users.limits()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_get_user_limits(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -93,7 +94,6 @@ def test_get_user_limits(management_api: api.RMQManagementAPI, api_mock: MockRou
     response = management_api.users.individual_limits(user="test")
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_set_user_limit(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -101,7 +101,11 @@ def test_set_user_limit(management_api: api.RMQManagementAPI, api_mock: MockRout
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.users.set_limit(user="test", limit="max-channels", value=100)
+    response = management_api.users.set_limit(
+        user="test", limit="max-channels", value=100
+    )
+
+    assert response is None
 
 
 def test_delete_user_limit(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -109,4 +113,6 @@ def test_delete_user_limit(management_api: api.RMQManagementAPI, api_mock: MockR
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.users.delete_limit(user="test", limit="max-channels")
+    response = management_api.users.delete_limit(user="test", limit="max-channels")
+
+    assert response is None

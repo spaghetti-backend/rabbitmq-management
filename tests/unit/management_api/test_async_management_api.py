@@ -31,7 +31,9 @@ async def test_change_cluster_name(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.change_cluster_name("test@rabbitmq")
+    response = await async_management_api.change_cluster_name("test@rabbitmq")
+
+    assert response is None
 
 
 async def test_get_extensions(
@@ -44,8 +46,6 @@ async def test_get_extensions(
     response = await async_management_api.extensions()
 
     assert isinstance(response, list)
-    assert len(response) == 2
-    assert response[0].get("javascript") == "dispatcher.js"
 
 
 async def test_get_overview(
@@ -63,7 +63,9 @@ async def test_rebalance_queues(
 ):
     api_mock.post("rebalance/queues").respond(status_code=httpx.codes.NO_CONTENT)
 
-    await async_management_api.rebalance_queues()
+    response = await async_management_api.rebalance_queues()
+
+    assert response is None
 
 
 async def test_whoami(

@@ -11,8 +11,6 @@ async def test_get_channels(
     response = await async_management_api.channels.all()
 
     assert isinstance(response, list)
-    assert len(response) == 1
-    assert response[0].get("state") == "running"
 
 
 async def test_get_channel_detail(

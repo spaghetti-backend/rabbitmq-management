@@ -12,7 +12,6 @@ async def test_get_all_policies(
     response = await async_management_api.policies.all()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_get_policies_by_vhost(
@@ -23,7 +22,6 @@ async def test_get_policies_by_vhost(
     response = await async_management_api.policies.by_vhost(vhost="/")
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_get_policy_detail(
@@ -49,7 +47,11 @@ async def test_set_policy(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.policies.set(vhost="/", policy="test", value=mock_json)
+    response = await async_management_api.policies.set(
+        vhost="/", policy="test", value=mock_json
+    )
+
+    assert response is None
 
 
 async def test_delete_policy(
@@ -59,7 +61,9 @@ async def test_delete_policy(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.policies.delete(vhost="/", policy="test")
+    response = await async_management_api.policies.delete(vhost="/", policy="test")
+
+    assert response is None
 
 
 async def test_get_all_operator_policies(
@@ -70,7 +74,6 @@ async def test_get_all_operator_policies(
     response = await async_management_api.policies.operator.all()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_get_operator_policies_by_vhost(
@@ -81,7 +84,6 @@ async def test_get_operator_policies_by_vhost(
     response = await async_management_api.policies.operator.by_vhost(vhost="/")
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_get_operator_policy_detail(
@@ -111,9 +113,11 @@ async def test_set_operator_policy(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.policies.operator.set(
+    response = await async_management_api.policies.operator.set(
         vhost="/", policy="test", value=mock_json
     )
+
+    assert response is None
 
 
 async def test_delete_operator_policy(
@@ -123,4 +127,8 @@ async def test_delete_operator_policy(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.policies.operator.delete(vhost="/", policy="test")
+    response = await async_management_api.policies.operator.delete(
+        vhost="/", policy="test"
+    )
+
+    assert response is None

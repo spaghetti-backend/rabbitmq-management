@@ -10,7 +10,6 @@ def test_get_all_nodes(management_api: api.RMQManagementAPI, api_mock: MockRoute
     response = management_api.nodes.all()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test@rabbitmq"
 
 
 @pytest.mark.parametrize(

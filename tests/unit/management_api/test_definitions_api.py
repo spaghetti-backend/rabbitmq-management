@@ -22,7 +22,9 @@ def test_upload_broker_definitions(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.definitions.upload(definitions=mock_json)
+    response = management_api.definitions.upload(definitions=mock_json)
+
+    assert response is None
 
 
 def test_get_all_definitions_by_vhost(
@@ -45,6 +47,8 @@ def test_upload_vhosts_definitions(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.definitions.upload_vhosts_definitions(
+    response = management_api.definitions.upload_vhosts_definitions(
         vhost="/", definitions=mock_json
     )
+
+    assert response is None

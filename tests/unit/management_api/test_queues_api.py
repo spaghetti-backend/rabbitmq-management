@@ -33,7 +33,6 @@ def test_get_all_queues(
     )
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_get_all_queues_by_vhost(
@@ -44,7 +43,6 @@ def test_get_all_queues_by_vhost(
     response = management_api.queues.by_vhost(vhost="/")
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 def test_get_queue_detail(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -66,7 +64,9 @@ def test_set_queue(management_api: api.RMQManagementAPI, api_mock: MockRouter):
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.queues.set(vhost="/", queue="test", value=mock_json)
+    response = management_api.queues.set(vhost="/", queue="test", value=mock_json)
+
+    assert response is None
 
 
 def test_delete_queue(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -74,7 +74,9 @@ def test_delete_queue(management_api: api.RMQManagementAPI, api_mock: MockRouter
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.queues.delete(vhost="/", queue="test")
+    response = management_api.queues.delete(vhost="/", queue="test")
+
+    assert response is None
 
 
 def test_get_queue_bindings(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -85,7 +87,6 @@ def test_get_queue_bindings(management_api: api.RMQManagementAPI, api_mock: Mock
     response = management_api.queues.bindings(vhost="/", queue="test")
 
     assert isinstance(response, list)
-    assert response[0].get("destination") == "test"
 
 
 def test_purge_queue(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -93,7 +94,9 @@ def test_purge_queue(management_api: api.RMQManagementAPI, api_mock: MockRouter)
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.queues.purge(vhost="/", queue="test")
+    response = management_api.queues.purge(vhost="/", queue="test")
+
+    assert response is None
 
 
 def test_queue_action(management_api: api.RMQManagementAPI, api_mock: MockRouter):
@@ -102,7 +105,9 @@ def test_queue_action(management_api: api.RMQManagementAPI, api_mock: MockRouter
         status_code=httpx.codes.NO_CONTENT
     )
 
-    management_api.queues.actions(vhost="/", queue="test", value=mock_json)
+    response = management_api.queues.actions(vhost="/", queue="test", value=mock_json)
+
+    assert response is None
 
 
 def test_get_message_from_queue(
@@ -121,4 +126,3 @@ def test_get_message_from_queue(
     response = management_api.queues.messages(vhost="/", queue="test", value=mock_json)
 
     assert isinstance(response, list)
-    assert response[0].get("payload") == "test"

@@ -49,8 +49,10 @@ class BindingsAPI(BaseAPI):
         path = Paths.bindings.exchange_to_queue(
             vhost=vhost, exchange=exchange, queue=queue
         )
-        response = self._http_client.post(path=path, payload=payload)
-        return response["headers"]["location"]
+        response = self._http_client.post(
+            path=path, payload=payload, return_headers=True
+        )
+        return response["location"]
 
     def exchange_to_queue_binding_details(
         self, vhost: str, exchange: str, queue: str, properties_key: str
@@ -117,8 +119,10 @@ class BindingsAPI(BaseAPI):
         path = Paths.bindings.exchange_to_exchange(
             vhost=vhost, source=source, destination=destination
         )
-        response = self._http_client.post(path=path, payload=payload)
-        return response["headers"]["location"]
+        response = self._http_client.post(
+            path=path, payload=payload, return_headers=True
+        )
+        return response["location"]
 
     def exchange_to_exchange_binding_details(
         self, vhost: str, source: str, destination: str, properties_key: str

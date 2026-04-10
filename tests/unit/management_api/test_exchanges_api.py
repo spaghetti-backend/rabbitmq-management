@@ -44,7 +44,7 @@ def test_create_exchange(management_api: api.RMQManagementAPI, api_mock: MockRou
         },
     ).respond(status_code=httpx.codes.CREATED)
 
-    management_api.exchanges.set(
+    response = management_api.exchanges.set(
         vhost="/",
         exchange="new_exch",
         exchange_type="direct",
@@ -54,13 +54,19 @@ def test_create_exchange(management_api: api.RMQManagementAPI, api_mock: MockRou
         arguments={"x-arg": "value"},
     )
 
+    assert response is None
+
 
 def test_delete_exchange(management_api: api.RMQManagementAPI, api_mock: MockRouter):
     api_mock.delete(
         url__regex="exchanges/%2F/test", params={"if-unused": True}
     ).respond(status_code=httpx.codes.NO_CONTENT)
 
-    management_api.exchanges.delete(vhost="/", exchange="test", if_unused=True)
+    response = management_api.exchanges.delete(
+        vhost="/", exchange="test", if_unused=True
+    )
+
+    assert response is None
 
 
 def test_get_exchanges_source_bindings(

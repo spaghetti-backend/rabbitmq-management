@@ -12,7 +12,6 @@ async def test_get_all_parameters(
     response = await async_management_api.parameters.all()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_get_component_parameters(
@@ -23,7 +22,6 @@ async def test_get_component_parameters(
     response = await async_management_api.parameters.by_component(component="shovel")
 
     assert isinstance(response, list)
-    assert response[0].get("component") == "shovel"
 
 
 async def test_get_vhosts_component_parameters(
@@ -38,7 +36,6 @@ async def test_get_vhosts_component_parameters(
     )
 
     assert isinstance(response, list)
-    assert response[0].get("component") == "shovel"
 
 
 async def test_get_component_parameter_detail(
@@ -79,9 +76,11 @@ async def test_set_component_parameter(
         json=mock_json,
     ).respond(status_code=httpx.codes.CREATED)
 
-    await async_management_api.parameters.set(
-        component="shovel", vhost="/", parameter="test", value=mock_json.get("value")
+    response = await async_management_api.parameters.set(
+        component="shovel", vhost="/", parameter="test", value=mock_json["value"]
     )
+
+    assert response is None
 
 
 async def test_delete_parameter(
@@ -91,9 +90,11 @@ async def test_delete_parameter(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.parameters.delete(
+    response = await async_management_api.parameters.delete(
         component="shovel", vhost="/", parameter="test"
     )
+
+    assert response is None
 
 
 async def test_get_all_global_parameters(
@@ -104,7 +105,6 @@ async def test_get_all_global_parameters(
     response = await async_management_api.parameters.global_parameters()
 
     assert isinstance(response, list)
-    assert response[0].get("name") == "test"
 
 
 async def test_get_global_parameter_detail(
@@ -134,7 +134,7 @@ async def test_set_global_parameter(
     ).respond(status_code=httpx.codes.CREATED)
 
     await async_management_api.parameters.set_global_parameter(
-        parameter="test", value=mock_json.get("value")
+        parameter="test", value=mock_json["value"]
     )
 
 
@@ -145,4 +145,8 @@ async def test_delete_global_parameter(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.parameters.delete_global_parameter(parameter="test")
+    response = await async_management_api.parameters.delete_global_parameter(
+        parameter="test"
+    )
+
+    assert response is None

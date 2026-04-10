@@ -48,7 +48,7 @@ async def test_create_exchange(
         },
     ).respond(status_code=httpx.codes.CREATED)
 
-    await async_management_api.exchanges.set(
+    response = await async_management_api.exchanges.set(
         vhost="/",
         exchange="new_exch",
         exchange_type="direct",
@@ -58,6 +58,8 @@ async def test_create_exchange(
         arguments={"x-arg": "value"},
     )
 
+    assert response is None
+
 
 async def test_delete_exchange(
     async_management_api: api.AsyncRMQManagementAPI, api_mock: MockRouter
@@ -66,9 +68,11 @@ async def test_delete_exchange(
         url__regex="exchanges/%2F/test", params={"if-unused": True}
     ).respond(status_code=httpx.codes.NO_CONTENT)
 
-    await async_management_api.exchanges.delete(
+    response = await async_management_api.exchanges.delete(
         vhost="/", exchange="test", if_unused=True
     )
+
+    assert response is None
 
 
 async def test_get_exchanges_source_bindings(

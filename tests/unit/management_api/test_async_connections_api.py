@@ -39,7 +39,11 @@ async def test_close_connection(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.connections.close(connection="tc", reason=reason)
+    response = await async_management_api.connections.close(
+        connection="tc", reason=reason
+    )
+
+    assert response is None
 
 
 async def test_connections_by_user(
@@ -64,9 +68,11 @@ async def test_close_all_user_connections(
         status_code=httpx.codes.NO_CONTENT
     )
 
-    await async_management_api.connections.close_user_connections(
+    response = await async_management_api.connections.close_user_connections(
         username="tu", reason=reason
     )
+
+    assert response is None
 
 
 async def test_get_connection_channels(
