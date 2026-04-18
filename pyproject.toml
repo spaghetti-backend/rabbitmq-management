@@ -7,7 +7,7 @@ authors = [
     { name = "Rivkat Karimov", email = "redscorpion32.rk@gmail.com" }
 ]
 
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "httpx>=0.28.1",
 ]
@@ -18,13 +18,13 @@ build-backend = "uv_build"
 
 [dependency-groups]
 lint = [
-    "ruff>=0.15.7",
+    "ruff>=0.15.11",
 ]
 test = [
-    "pytest>=8.4.2",
+    "pytest>=9.0.3",
     "pytest-asyncio>=1.2.0",
     "pytest-cov>=7.1.0",
-    "respx>=0.22.0",
+    "respx>=0.23.1",
 ]
 docs = [
     "mkdocs-material>=9.5.0",
